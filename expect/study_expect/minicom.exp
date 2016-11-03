@@ -1,0 +1,45 @@
+#!/usr/bin/expect
+
+set CTLD \004
+set CTLE \005
+set CTLF \006
+set CTLG \007
+set CTLH \008
+
+spawn minicom
+sleep 1
+
+proc do_login {} {
+    send "\r"
+    expect {
+    -nocase "Password:" {send "5up\r";exp_continue}
+    -nocase "login:" {send "root\r";exp_continue}
+    "~ #" {send "ps\r\n"}
+    "\r" {exp_continue}
+    "\n" {exp_continue}
+    timeout {send "\004";exp_continue}
+    }
+}
+
+proc do_logout {} {
+    send "\r"
+    send "exit\r"
+}
+
+proc do_reboot {} {
+    send "\r"
+    send "reboot\r"
+    sleep 10
+    do_login
+}
+
+do_login
+send_user "start interact\n"
+
+interact {
+$CTLE {exit}
+$CTLF {do_reboot}
+$CTLG {do_login}
+$CTLH {do_reboot}
+}
+
