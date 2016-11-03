@@ -1,0 +1,25 @@
+<Device idx="0">
+	<DeviceInfo idx="0">
+		<UpTime idx="0" dataType="uint" />
+		<MyselfData idx="1" dataType="user" dataSize="16" />
+	</DeviceInfo>
+	<WiFi idx="1">
+		<Radio idx="0">
+			<protoype idx="0">
+				<Channel idx="0" dataType="uint" />
+			</protoype>
+		</Radio>
+                <AccessPoint idx="1">
+                        <protoype idx="0">
+                                <Enable idx="0" dataType="bool" />
+                                <SSIDReference idx="1" dataType="text">
+                                        Device.WiFi.SSID.1
+                                </SSIDReference>
+                                <Security idx="2">
+                                        <ModesSupported idx="0" dataType="text" />
+                                        <ModeEnabled idx="1" dataType="text" />
+                                </Security>
+                        </protoype>
+                </AccessPoint>
+	</WiFi>
+</Device>
