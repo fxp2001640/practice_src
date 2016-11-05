@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon[zh_CN]=gnome-panel-launcher
+Exec=gnome-terminal --tab-with-profile=minicom --tab-with-profile=test --tab-with-profile=qsdk_build --tab-with-profile=qsdk_linux_src --tab-with-profile=qsdk_nss_src --tab-with-profile=my-ruby --tab-with-profile=nss_1.0_build --tab-with-profile=nss_1.0_src
+Name[zh_CN]=xpfan-terminal
+Name=xpfan-terminal
+Icon=gnome-panel-launcher

@@ -1,0 +1,9 @@
+[user]
+	name = Xiaoping Fan
+	email = xfan@qit.qualcomm.com
+[review "review-android.quicinc.com"]
+	username = xfan
+[url "ssh://xfan@qca-git01.qualcomm.com:29418/"]
+	insteadOf = ssh://qca-git01.qualcomm.com:29418/
+[color]
+	ui = auto

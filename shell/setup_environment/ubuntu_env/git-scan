@@ -1,0 +1,39 @@
+#! /bin/bash
+
+current_dir=`pwd`
+project_file="$current_dir/.repo/manifest.xml"
+
+get_project_dirs()
+{
+	local dirs=`grep path $project_file |cut -d '=' -f 2 -`
+	#remove "
+	dirs=${dirs//\"/}
+	echo $dirs
+}
+
+each_project_dir()
+{
+	local projects=$1
+	local func=$2
+
+	for dir in $projects
+	do
+		$func $dir
+	done
+}
+
+scan_change()
+{
+	local dir=$1
+	echo "----------------"
+	echo $current_dir/$dir
+	cd $current_dir/$dir
+	git status
+}
+
+if [ -e "$project_file" ] ; then
+	dirs=$(get_project_dirs)
+	each_project_dir "$dirs" scan_change
+else
+	echo "There is no .repo directory in current directory"
+fi

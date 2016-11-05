@@ -1,0 +1,12 @@
+network={
+	ssid='tim1'
+	other='tim_other1'
+	psk='1234'
+}
+
+network={
+	ssid='tim2'
+	other='tim_other2'
+	psk='5678'
+}
+

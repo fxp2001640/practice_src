@@ -1,0 +1,4 @@
+#!/bin/sh
+
+#this script will be executed before the installation, ie before the files are copied over
+#You can use the PKG_ROOT variable in these scripts to get the destination directory where the package is/was/will be installed.

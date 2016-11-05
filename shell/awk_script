@@ -1,0 +1,2 @@
+/[a-zA-Z]+=[a-zA-Z0-9\']+/ {if((ssid_start == 1) && match($1, (".*" filter))){print $2} if(match($1, ".*ssid") && ($2 == ssid)){ssid_start = 1}}
+/network=/ {ssid_start = 0}

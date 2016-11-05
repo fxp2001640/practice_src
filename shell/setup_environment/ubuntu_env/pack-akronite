@@ -1,0 +1,99 @@
+#! /bin/bash
+
+#host side prerequirement
+#Python >= 2.6
+#ordereddict >= 1.1 : easy_install ordereddict
+#mkimage >= 2012.07 : uboot source code/tools
+#dtc >= 1.2.0 : device-tree-compiler
+
+current_dir=`pwd`
+#official_build_dir="/tftpboot/akronite/02232014/IPQ8066.LN.1.0.1-00126-C-1/common/build/ipq"
+official_build_dir="/tftpboot/akronite/IPQ8066.LN.1.1-00217-R-1/common/build/ipq"
+pack_dir="$current_dir/pack"
+akronite_image_dir="$current_dir/qsdk/bin/ipq806x"
+pack_cmd="/tftpboot/akronite/pack_utilities/pack.py -i -t nand -p 2048 -b 64 -c 2048 -o"
+
+copy_partition_mbn()
+{
+	[ -f "$pack_dir/partition.mbn" ] || cp -f "$official_build_dir/nand-system-partition.bin" "$pack_dir/partition.mbn"
+}
+
+sub_string_search()
+{
+	local str=$1
+	local sub_str=$2
+
+	([ "$str" = "${str/$sub_str}" ] && echo '0') || echo '1'
+}
+
+filter_line()
+{
+	local prev_filter=$1
+	local line=$2
+	local sections=$3
+	local is_section_head=0
+	local need
+
+	[ $(sub_string_search $line '[') = "1" ] && [ $(sub_string_search $line ']') = "1" ] && is_section_head=1
+
+	[ "$is_section_head" = "0" ] && echo $prev_filter && return
+
+	for sec in $sections
+	do
+		need=`echo $line|grep $sec`
+		[ -n "$need" ] && break
+	done
+
+	[ -n "$need" ] && echo "0" || echo "1"
+}
+
+copy_flash_conf()
+{
+	local sections="$1"
+	local filter='1'
+
+	[ -f "$pack_dir/flash.conf" ] && return
+
+	while read line; do
+		filter="$(filter_line "$filter" "$line" "$sections")"
+		[ "$filter" = "0" ] && echo $line >> "$pack_dir/flash.conf"
+	done < "$official_build_dir/nand-flash.conf"
+}
+
+copy_images()
+{
+	local images=$1
+	local do_copy
+
+	do_copy=$(sub_string_search "$images" "hlos")
+	[ "$do_copy" = "1" ] && cp -f "$akronite_image_dir/openwrt-ipq806x-3.4-uImage" "$pack_dir"
+
+	do_copy=$(sub_string_search "$images" "fs")
+	[ "$do_copy" = "1" ] && cp -f "$akronite_image_dir/openwrt-ipq806x-ubi-root.img" "$pack_dir"
+
+	do_copy=$(sub_string_search "$images" "u-boot")
+	[ "$do_copy" = "1" ] && cp -f "$akronite_image_dir/openwrt-ipq806x-cdp-u-boot.mbn" "$pack_dir"
+}
+
+do_pack()
+{
+	local images=$1
+
+	[ -e "$akronite_image_dir" ] || return
+	[ -e "$pack_dir" ] || mkdir "$pack_dir"
+	copy_partition_mbn
+	copy_flash_conf "$images"
+	copy_images "$images"
+	$pack_cmd nand-ipq806x-single.img $pack_dir
+	mv nand-ipq806x-single.img /tftpboot
+}
+
+update_kernel_fs()
+{
+#	tftpboot 0x41000000 nand-ipq806x-single.img
+#	imgaddr=0x41000000
+#	source $imgaddr:script
+	echo "just record flash command"
+}
+
+do_pack "hlos fs"

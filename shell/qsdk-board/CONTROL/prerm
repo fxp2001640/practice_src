@@ -1,0 +1,4 @@
+#!/bin/sh
+
+#this one will be executed before the files are removed but after ipkg-link ie the files will be present in the destination directory but the symbolic links in / won't exists anymore
+#You can use the PKG_ROOT variable in these scripts to get the destination directory where the package is/was/will be installed.

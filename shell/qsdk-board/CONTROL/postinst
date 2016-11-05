@@ -1,0 +1,4 @@
+#!/bin/sh
+
+#this one will be executed after the installation but before ipkg-link ie the files will be present in the destination directory but not the symbolic links in /
+#You can use the PKG_ROOT variable in these scripts to get the destination directory where the package is/was/will be installed.

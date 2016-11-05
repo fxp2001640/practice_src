@@ -1,0 +1,23 @@
+# terminal_startup_cmd, executed by ~/.bashrc
+
+change_terminal_work_dir(){
+	local title=$1
+	local branches_dir="/home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches"
+	local nss_rel_dir="$branches_dir/nss_firmware_workspace/nss_firmware_workspace/components/rel/nss.ak"
+	local p4_dir="/home/xpfan/source_code/my_perforce_client"
+
+	declare -A work_dir
+
+	work_dir[test]="/home/xpfan"
+	work_dir[minicom]="/home/xpfan"
+	work_dir[my-ruby]="$p4_dir/source/test_script/ruby/study_ruby"
+	work_dir[qsdk_build]="$branches_dir/qsdk_2.0/qsdk"
+	work_dir[qsdk_linux_src]="$branches_dir/my_projects/qsdk_2.0/linux-cscope"
+	work_dir[qsdk_nss_src]="$branches_dir/my_projects/qsdk_2.0/qca-nss-cscope"
+	work_dir[nss_1.0_build]="$nss_rel_dir/1.0"
+	work_dir[nss_1.0_src]="$nss_rel_dir/1.0/nss_proc/pkg"
+
+	cd ${work_dir[$title]}
+}
+
+change_terminal_work_dir $XPFAN_TERMINAL_TITLE

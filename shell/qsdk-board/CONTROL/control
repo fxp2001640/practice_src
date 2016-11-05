@@ -1,0 +1,10 @@
+Package: qsdk-board
+Version: 1.0.0
+Depends:
+Provides:
+Architecture: ipq806x
+Maintainer: xfan@qca.qualcomm.com
+Description: shell scripts to quickly configure qsdk board
+Section: net
+Priority: optional
+Source: http://www.qualcomm.com

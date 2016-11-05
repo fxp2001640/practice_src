@@ -1,0 +1,4 @@
+#!/bin/sh
+
+#this one is executed after the files are removed
+#You can use the PKG_ROOT variable in these scripts to get the destination directory where the package is/was/will be installed.

@@ -1,0 +1,33 @@
+#! /bin/bash
+
+create_code_project()
+{
+	project_dir="$PWD/$1"
+	shift
+
+	[ -e $project_dir ] || mkdir -p $project_dir
+	cd $project_dir
+
+	for dir in "$@"
+	do
+		case $dir in
+		/*)
+			;;
+		*)
+			dir="../$dir"
+			;;
+		esac
+
+		find $dir -name "*.h" -o -name "*.c" -o -name "*.l" -o -name "*.y" >> cscope.files
+	done
+
+	cscope -bkq -i cscope.files
+	ctags -R -L cscope.files
+}
+
+if [ $# -eq 0 ] ; then
+	echo "argv[0] : new directory to put code project files"
+	echo "argv[1...n] : directory which include source code"
+else
+	create_code_project "$@"
+fi
