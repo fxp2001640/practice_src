@@ -1,0 +1,61 @@
+--- 
+- !ruby/object:Router 
+  fs_name: ap121-router-squashfs
+  kn_name: vmlinux-router.lzma.uImage
+  mtd_part: 32k(u-boot1),32k(u-boot2),3008k(rootfs),896k(uImage),64k(mib0),64k(ART)
+  name: ap121-router
+  start_addr: 2667577344
+  term_pwd: 5up
+  term_user: root
+  uboot_prompt: ar7240>
+  shell_prompt: '~ #'
+- !ruby/object:Router 
+  fs_name: ap123-router-squashfs
+  kn_name: vmlinux-router.lzma.uImage
+  mtd_part: 32k(u-boot1),32k(u-boot2),3008k(rootfs),896k(uImage),64k(mib0),64k(ART)
+  name: ap123-router
+  start_addr: 2667577344
+  term_pwd: 5up
+  term_user: root
+  uboot_prompt: ar7240>
+  shell_prompt: '~ #'
+- !ruby/object:Router 
+  fs_name: db12x-hgw-squashfs
+  kn_name: vmlinux.lzma.uImage
+  mtd_part: 256k(u-boot),64k(u-boot-env),6336k(rootfs),1408k(uImage),64k(mib0),64k(ART)
+  name: db12x-hgw
+  start_addr: 2667577344
+  term_pwd: 5up
+  term_user: root
+  uboot_prompt: ar7240>
+  shell_prompt: '~ #'
+- !ruby/object:Router 
+  fs_name: 'db12x-hgw-nand-jffs2'
+  kn_name: 'vmlinux.lzma.uImage'
+  mtd_part: 512k(u-boot),128k(u-boot-env),3m(uImage),15m(rootfs),128k(mib0),128k(caldata)
+  name: db12x-hgw-nand
+  start_addr: 0
+  term_pwd: 5up
+  term_user: root
+  uboot_prompt: ar7240>
+  shell_prompt: '~ #'
+- !ruby/object:Router 
+  fs_name: ap99-hgw-squashfs
+  kn_name: vmlinux.lzma.uImage
+  mtd_part: 256k(u-boot),256k(u-boot-env),3072k(spare-rootfs),1024k(spare-uImage),3072k(rootfs),1024k(uImage),256k(mib0),256k(mib1),4096k(ct),256k(ART)
+  name: ap93-ap99-hgw
+  start_addr: 3204448256
+  term_pwd: 5up
+  term_user: root
+  uboot_prompt: ar7240>
+  shell_prompt: '~ #'
+- !ruby/object:Router 
+  fs_name: 'openwrt-db12x-2.6.31-generic-root.jffs2-128k-nand'
+  kn_name: 'openwrt-db12x-2.6.31-generic-uImage-lzma.bin'
+  mtd_part: 512k(u-boot),128k(u-boot-env),3m(uImage),15m(rootfs),128k(mib0),128k(caldata)
+  name: openwrt-db12x-hgw-nand
+  start_addr: 0
+  term_pwd: 5up
+  term_user: root
+  uboot_prompt: ar7240>
+  shell_prompt: '/#'

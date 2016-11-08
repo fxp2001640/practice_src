@@ -1,0 +1,31 @@
+<Device>
+    <DHCPv4>
+        <Client>
+            <Enable type="config" default="0">0</Enable>
+            <Alias>eth0_dhcpv4_client</Alias>
+            <Interface type="config">eth0</Interface>
+            <Status type="status">Disabled</Status>
+            <DHCPStatus type="status">Init</DHCPStatus>
+            <Renew type="config">0</Renew>
+            <IPAddress type="status"/>
+            <SubnetMask type="status"/>
+            <IPRouters type="status"/>
+            <DNSServers type="status"/>
+            <LeaseTimeRemaining type="status"/>
+            <DHCPServer type="status"/>
+            <SentOptionNumberOfEntries type="status"/>
+            <SentOptionNumberOfEntries type="status"/>
+            <SentOption node_type="array">
+                <Enable type="config"/>
+                <Tag type="config"/>
+                <Value type="config"/>
+            </SentOption>
+            <ReqOption node_type="array">
+                <Enable type="config"/>
+                <Order type="config"/>
+                <Tag type="config"/>
+                <Value type="config"/>
+            </ReqOption>
+        </Client>
+    </DHCPv4>
+</Device>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>xpfan serial com</title>
+	<link rel="stylesheet" href="styles.css">
+	<script type="text/ruby" src="serialTerminalExt.rb" />
+	<script type="text/ruby">
+		def xpfanSerialComInit
+		end
+
+		def executecmd
+			cmdInput=document.getElementById("comCommandInputText")
+			cmd=cmdInput.value
+			cmdInput.value=""
+			cmdHis=document.getElementById("comCommandHistory9")
+			cmdHist.innerHTML=cmd
+		end
+	</script>
+</head>
+<body onload="xpfanSerialComInit()">
+	<div id="header">
+		<h1>xpfan serial com</h1>
+	</div>
+
+	<div id="comContent">
+		<div id="comLine9"></div>
+		<div id="comLine8"></div>
+		<div id="comLine7"></div>
+		<div id="comLine6"></div>
+		<div id="comLine5"></div>
+		<div id="comLine4"></div>
+		<div id="comLine3"></div>
+		<div id="comLine2"></div>
+		<div id="comLine1"></div>
+		<div id="comLine0"></div>
+	</div>
+
+	<div id="comCommand">
+		<div id="comCommandInput">
+			Command: <input type="text" id="comCommandInputText" />
+			 <button type="button" onclick="executecmd()">Execute</button> 
+		</div>
+		<div id="comCommandHistory">
+			<div id="comCommandHistory9"></div>
+			<div id="comCommandHistory8"></div>
+			<div id="comCommandHistory7"></div>
+			<div id="comCommandHistory6"></div>
+			<div id="comCommandHistory5"></div>
+			<div id="comCommandHistory4"></div>
+			<div id="comCommandHistory3"></div>
+			<div id="comCommandHistory2"></div>
+			<div id="comCommandHistory1"></div>
+			<div id="comCommandHistory0"></div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<Device>
+    <DHCPv4>
+        <Server>
+	    <Enable type="config" default="0">0</Enable>
+            <PoolNumberOfEntries type="status"/>
+            <Pool node_type="array">
+                    <Enable type="config" default="0">0</Enable>
+                    <Status type="status">Disabled</Status>
+                    <Alias>eth0_dhcpv4_server</Alias>
+                    <Order type="config"/>
+                    <Interface type="config">eth0</Interface>
+                    <VendorClassID type="config"/>
+                    <VendorClassIDExclude type="config"/>
+                    <VendorClassIDMode type="config"/>
+                    <ClientID/>
+                    <ClientIDExclude/>
+                    <UserClassID/>
+                    <UserClassIDExclude/>
+                    <Chaddr/>
+                    <ChaddrMask/>
+                    <ChaddrExclude/>
+                    <MinAddress/>
+                    <MaxAddress/>
+                    <ReservedAddresses/>
+                    <SubnetMask/>
+                    <DNSServers/>
+                    <DomainName/>
+                    <IPRouters/>
+                    <LeaseTime/>
+            </Pool>
+        </Server>
+    </DHCPv4>
+</Device>

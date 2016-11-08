@@ -1,0 +1,986 @@
+Device.WiFi.RadioNumberOfEntries
+----------------------------------------------------------------
+The number of entries in the Radio table.
+
+Device.WiFi.SSIDNumberOfEntries
+----------------------------------------------------------------
+The number of entries in the SSID table.
+
+Device.WiFi.AccessPointNumberOfEntries
+----------------------------------------------------------------
+The number of entries in the AccessPoint table.
+
+Device.WiFi.EndPointNumberOfEntries
+----------------------------------------------------------------
+The number of entries in the EndPoint table.
+
+Device.WiFi.Radio.*.Enable
+----------------------------------------------------------------
+Enables or disables the radio.
+This parameter is based on ifAdminStatus from [RFC2863].
+
+Device.WiFi.Radio.*.Status
+----------------------------------------------------------------
+The current operational state of the radio (see 
+[Section 4.2.2/TR-181i2]). Enumeration of:
+Up
+  Down
+  Unknown
+  Dormant
+  NotPresent
+  LowerLayerDown
+  Error
+ (OPTIONAL)
+
+When Enable is false
+ then Status SHOULD normally be Down (or NotPresent
+ or Error if there is a fault condition on the interface). 
+When Enable is 
+changed to true then Status SHOULD change to Up if 
+and only if the interface is able to transmit and receive network 
+traffic; it SHOULD change to Dormant if and only if the interface
+ is operable but is waiting for external actions before it can transmit 
+and receive network traffic (and subsequently change to Up if 
+still operable when the expected actions have completed); it SHOULD 
+change to LowerLayerDown if and only if the interface is 
+prevented from entering the Up state because one or more of the 
+interfaces beneath it is down; it SHOULD remain in the Error 
+state if there is an error or other fault condition detected on the 
+interface; it SHOULD remain in the NotPresent state if the 
+interface has missing (typically hardware) components; it SHOULD change 
+to Unknown if the state of the interface can not be determined 
+for some reason.
+This parameter is based on ifOperStatus from [RFC2863].
+
+Device.WiFi.Radio.*.Alias
+----------------------------------------------------------------
+A non-volatile handle used to reference this 
+instance. Alias provides a mechanism for an ACS to label this 
+instance for future reference. An initial unique value MUST be assigned 
+when the CPE creates an instance of this object.
+
+Device.WiFi.Radio.*.Name
+----------------------------------------------------------------
+The textual name of the radio as assigned by the
+ CPE.
+
+Device.WiFi.Radio.*.LastChange
+----------------------------------------------------------------
+The accumulated time in seconds since the
+ radio entered its current operational state.
+
+Device.WiFi.Radio.*.LowerLayers
+----------------------------------------------------------------
+Comma-separated list (maximum length 1024) of 
+strings. Each list item MUST be the path name of an interface object 
+that is stacked immediately below this interface object.  If the 
+referenced object is deleted, the corresponding item MUST be removed 
+from the list.    See [Section 4.2.1/TR-181i2].
+Note: Since Radio is a
+ layer 1 interface, it is expected that LowerLayers will not be 
+used.
+
+Device.WiFi.Radio.*.Upstream
+----------------------------------------------------------------
+Indicates whether the interface points towards 
+the Internet (true) or towards End Devices (false).
+For example:
+For an Internet Gateway Device, Upstream will be true
+ for all WAN interfaces and false for all LAN interfaces.
+  For a standalone WiFi Access Point that is connected via 
+Ethernet to an Internet Gateway Device, Upstream will be true
+ for the Ethernet interface and false for the WiFi Radio 
+interface.
+  For an End Device, Upstream will be true for 
+all interfaces.
+
+Device.WiFi.Radio.*.MaxBitRate
+----------------------------------------------------------------
+The maximum PHY bit rate supported by this 
+interface (expressed in Mbps).
+
+Device.WiFi.Radio.*.SupportedFrequencyBands
+----------------------------------------------------------------
+Comma-separated list of strings. List items 
+indicate the frequency bands at which the radio can operate.  Each list 
+item is an enumeration of:
+2.4GHz
+  5GHz
+
+Device.WiFi.Radio.*.OperatingFrequencyBand
+----------------------------------------------------------------
+The value MUST be a member of the list reported 
+by the SupportedFrequencyBands
+ parameter.    Indicates the frequency band at which the radio is 
+operating. 
+If the radio supports multiple bands, and OperatingFrequencyBand 
+is changed, then all parameters whose value is not valid for the new 
+frequency band (e.g. Channel)
+ MUST be set to a valid value (according to some CPE vendor-specific 
+behavior).
+
+Device.WiFi.Radio.*.SupportedStandards
+----------------------------------------------------------------
+Comma-separated list of strings. List items 
+indicate which IEEE 802.11 standards this Radio instance can 
+support simultaneously, in the frequency band specified by OperatingFrequencyBand.
+  Each list item is an enumeration of:
+a
+ ([802.11a-1999])
+  b
+ ([802.11b-1999])
+  g
+ ([802.11g-2003])
+  n
+ ([802.11n-2009])
+
+Each value indicates support for the indicated standard.
+If OperatingFrequencyBand
+ is set to 2.4GHz,
+ only values b, g, n are allowed.
+If OperatingFrequencyBand
+ is set to 5GHz,
+ only values a, n are allowed.
+
+Device.WiFi.Radio.*.OperatingStandards
+----------------------------------------------------------------
+Comma-separated list of strings.  Each list item
+ MUST be a member of the list reported by the SupportedStandards
+ parameter.   List items indicate which IEEE 802.11 standard this Radio instance is 
+configured for. 
+Each value indicates support for the indicated standard.
+If OperatingFrequencyBand
+ is set to 2.4GHz,
+ only values b, g, n are allowed.
+If OperatingFrequencyBand
+ is set to 5GHz,
+ only values a, n are allowed.
+For example, a value of "g,b" (or "b,g" - order is not important) means 
+that the 802.11g standard [802.11g-2003] 
+is used with a backwards-compatible mode for 802.11b [802.11b-1999]. A value of "g" means that only
+ the 802.11g standard can be used.
+
+Device.WiFi.Radio.*.PossibleChannels
+----------------------------------------------------------------
+Comma-separated list (maximum length 1024) of 
+strings. List items represent possible radio channels for the wireless 
+standard (a, b, g, n) and the regulatory domain. 
+Ranges in the form "n-m" are permitted.
+For example, for 802.11b and North America, would be "1-11".
+
+Device.WiFi.Radio.*.ChannelsInUse
+----------------------------------------------------------------
+Comma-separated list (maximum length 1024) of 
+strings. List items represent channels that the radio determines to be 
+currently in use (including any that it is using itself).
+Ranges in the form "n-m" are permitted.
+
+Device.WiFi.Radio.*.Channel
+----------------------------------------------------------------
+The current radio channel used by the 
+connection. To request automatic channel selection, set AutoChannelEnable
+ to true.
+Whenever AutoChannelEnable
+ is true, the value of the Channel parameter MUST be the 
+channel selected by the automatic channel selection procedure.
+Note: Valid Channel values depend on the OperatingFrequencyBand
+ and RegulatoryDomain
+ values specified.
+
+Device.WiFi.Radio.*.AutoChannelSupported
+----------------------------------------------------------------
+Indicates whether automatic channel selection is
+ supported by this radio. If false, then AutoChannelEnable
+ MUST be false.
+
+Device.WiFi.Radio.*.AutoChannelEnable
+----------------------------------------------------------------
+Enable or disable automatic channel selection.
+Set to false to disable the automatic channel selection 
+procedure, in which case the currently selected channel remains 
+selected.
+Set to true to enable the automatic channel selection procedure. 
+This procedure MUST automatically select the channel, and MAY also 
+change it subsequently.
+AutoChannelEnable MUST automatically change to false 
+whenever the channel is manually selected, i.e. whenever the Channel parameter
+ is written.
+Whenever AutoChannelEnable is true, the value of the Channel parameter
+ MUST be the channel selected by the automatic channel selection 
+procedure.
+
+Device.WiFi.Radio.*.AutoChannelRefreshPeriod
+----------------------------------------------------------------
+The time period in seconds between two 
+consecutive automatic channel selections. A value of 0 means that the 
+automatic channel selection is done only at boot time.
+This parameter is significant only if AutoChannelEnable
+ is set to true.
+
+Device.WiFi.Radio.*.OperatingChannelBandwidth
+----------------------------------------------------------------
+The channel bandwidth (applicable to 802.11n 
+specifications only).  Enumeration of:
+20MHz
+  40MHz
+ (wide mode)
+  Auto
+
+Device.WiFi.Radio.*.ExtensionChannel
+----------------------------------------------------------------
+The secondary extension channel position, 
+applicable when operating in wide channel mode (i.e. when OperatingChannelBandwidth
+ is set to 40MHz
+ or Auto).
+  Enumeration of:
+AboveControlChannel
+  BelowControlChannel
+  Auto
+
+Device.WiFi.Radio.*.GuardInterval
+----------------------------------------------------------------
+The guard interval value between OFDM symbols 
+(applicable to 802.11n specifications only).  Enumeration of:
+400nsec
+  800nsec
+  Auto
+
+Device.WiFi.Radio.*.MCS
+----------------------------------------------------------------
+The Modulation Coding Scheme index (applicable 
+to 802.11n specifications only). Values from 0 to 15 MUST be supported 
+([802.11n-2009]). A value of -1 indicates 
+automatic selection of the MCS index.
+
+Device.WiFi.Radio.*.TransmitPowerSupported
+----------------------------------------------------------------
+Comma-separated list (maximum length 64) of 
+integers (value -1 to 100). List items represent supported transmit 
+power levels as percentage of full power. For example, 
+"0,25,50,75,100". 
+A -1 item indicates auto mode (automatic decision by CPE). Auto mode 
+allows the Radio to adjust transmit power accordingly. For 
+example, this can be useful for power-save modes such as EU-CoC, where 
+the Radio can adjust power according to activity in the CPE.
+
+Device.WiFi.Radio.*.TransmitPower
+----------------------------------------------------------------
+Indicates the current transmit power level as a percentage
+ of full power. The value MUST be one of the values reported by the TransmitPowerSupported
+ parameter. A value of -1 indicates auto mode (automatic decision by 
+CPE).
+
+Device.WiFi.Radio.*.IEEE80211hSupported
+----------------------------------------------------------------
+Indicates whether IEEE 802.11h [802.11h-2003] functionality is supported by 
+this radio. The value can be true only if the 802.11a or the 
+802.11n@5GHz standard is supported (i.e. SupportedFrequencyBands
+ includes 5GHz
+ and SupportedStandards
+ includes a
+ and/or n).
+
+Device.WiFi.Radio.*.IEEE80211hEnabled
+----------------------------------------------------------------
+Indicates whether IEEE 802.11h functionality is 
+enabled on this radio. The value can be true only if the 802.11a 
+or the 802.11n@5GHz standard is supported and enabled (i.e. OperatingFrequencyBand
+ is 5GHz
+ and OperatingStandards
+ includes a
+ and/or n).
+
+Device.WiFi.Radio.*.RegulatoryDomain
+----------------------------------------------------------------
+The 802.11d Regulatory Domain. First two octets 
+are [ISO3166-1] two-character country code. 
+The third octet is either " " (all environments), "O" (outside) or "I" 
+(inside).  Possible patterns:
+[A-Z][A-Z][ OI]
+
+Device.WiFi.Radio.*.Stats.BytesSent
+----------------------------------------------------------------
+The total number of bytes transmitted out of the
+ interface, including framing characters.
+
+Device.WiFi.Radio.*.Stats.BytesReceived
+----------------------------------------------------------------
+The total number of bytes received on the 
+interface, including framing characters.
+
+Device.WiFi.Radio.*.Stats.PacketsSent
+----------------------------------------------------------------
+The total number of packets transmitted out of 
+the interface.
+
+Device.WiFi.Radio.*.Stats.PacketsReceived
+----------------------------------------------------------------
+The total number of packets received on the 
+interface.
+
+Device.WiFi.Radio.*.Stats.ErrorsSent
+----------------------------------------------------------------
+The total number of outbound packets that could 
+not be transmitted because of errors.
+
+Device.WiFi.Radio.*.Stats.ErrorsReceived
+----------------------------------------------------------------
+The total number of inbound packets that 
+contained errors preventing them from being delivered to a higher-layer 
+protocol.
+
+Device.WiFi.Radio.*.Stats.DiscardPacketsSent
+----------------------------------------------------------------
+The total number of outbound packets which were 
+chosen to be discarded even though no errors had been detected to 
+prevent their being transmitted. One possible reason for discarding such
+ a packet could be to free up buffer space.
+
+Device.WiFi.Radio.*.Stats.DiscardPacketsReceived
+----------------------------------------------------------------
+The total number of inbound packets which were 
+chosen to be discarded even though no errors had been detected to  
+prevent their being delivered. One possible reason for discarding such a
+ packet could be to free up buffer space.
+
+Device.WiFi.SSID.*.Enable
+----------------------------------------------------------------
+Enables or disables the SSID entry.
+This parameter is based on ifAdminStatus from [RFC2863].
+
+Device.WiFi.SSID.*.Status
+----------------------------------------------------------------
+The current operational state of the SSID entry 
+(see [Section 4.2.2/TR-181i2]). Enumeration 
+of:
+Up
+  Down
+  Unknown
+  Dormant
+  NotPresent
+  LowerLayerDown
+  Error
+ (OPTIONAL)
+
+When Enable is false
+ then Status SHOULD normally be Down (or NotPresent
+ or Error if there is a fault condition on the interface). 
+When Enable is 
+changed to true then Status SHOULD change to Up if 
+and only if the interface is able to transmit and receive network 
+traffic; it SHOULD change to Dormant if and only if the interface
+ is operable but is waiting for external actions before it can transmit 
+and receive network traffic (and subsequently change to Up if 
+still operable when the expected actions have completed); it SHOULD 
+change to LowerLayerDown if and only if the interface is 
+prevented from entering the Up state because one or more of the 
+interfaces beneath it is down; it SHOULD remain in the Error 
+state if there is an error or other fault condition detected on the 
+interface; it SHOULD remain in the NotPresent state if the 
+interface has missing (typically hardware) components; it SHOULD change 
+to Unknown if the state of the interface can not be determined 
+for some reason.
+This parameter is based on ifOperStatus from [RFC2863].
+
+Device.WiFi.SSID.*.Alias
+----------------------------------------------------------------
+A non-volatile handle used to reference this 
+instance. Alias provides a mechanism for an ACS to label this 
+instance for future reference. An initial unique value MUST be assigned 
+when the CPE creates an instance of this object.
+
+Device.WiFi.SSID.*.Name
+----------------------------------------------------------------
+The textual name of the SSID entry as assigned 
+by the CPE.
+
+Device.WiFi.SSID.*.LastChange
+----------------------------------------------------------------
+The accumulated time in seconds since the
+ SSID entered its current operational state.
+
+Device.WiFi.SSID.*.LowerLayers
+----------------------------------------------------------------
+Comma-separated list (maximum length 1024) of 
+strings. Each list item MUST be the path name of an interface object 
+that is stacked immediately below this interface object.  If the 
+referenced object is deleted, the corresponding item MUST be removed 
+from the list.    See [Section 4.2.1/TR-181i2].
+
+Device.WiFi.SSID.*.BSSID
+----------------------------------------------------------------
+[MACAddress] 
+  The Basic Service Set ID. 
+This is the MAC address of the access point, which can either be local 
+(when this instance models an access point SSID) or remote (when this 
+instance models an end point SSID).
+
+Device.WiFi.SSID.*.MACAddress
+----------------------------------------------------------------
+[MACAddress] 
+  The MAC address of this interface. 
+If this instance models an access point SSID, MACAddress is the 
+same as MACAddress. 
+Note: This is not necessarily the same as the Ethernet header source or 
+destination MAC address, which is associated with the IP interface and 
+is modeled via the Ethernet.Link.{i}.MACAddress
+ parameter.
+
+Device.WiFi.SSID.*.SSID
+----------------------------------------------------------------
+The current service set identifier in use by the
+ connection. The SSID is an identifier that is attached to packets sent 
+over the wireless LAN that functions as an ID for joining a particular 
+radio network (BSS).
+
+Device.WiFi.SSID.*.Stats.BytesSent
+----------------------------------------------------------------
+The total number of bytes transmitted out of the
+ interface, including framing characters.
+
+Device.WiFi.SSID.*.Stats.BytesReceived
+----------------------------------------------------------------
+The total number of bytes received on the 
+interface, including framing characters.
+
+Device.WiFi.SSID.*.Stats.PacketsSent
+----------------------------------------------------------------
+The total number of packets transmitted out of 
+the interface.
+
+Device.WiFi.SSID.*.Stats.PacketsReceived
+----------------------------------------------------------------
+The total number of packets received on the 
+interface.
+
+Device.WiFi.SSID.*.Stats.ErrorsSent
+----------------------------------------------------------------
+The total number of outbound packets that could 
+not be transmitted because of errors.
+
+Device.WiFi.SSID.*.Stats.ErrorsReceived
+----------------------------------------------------------------
+The total number of inbound packets that 
+contained errors preventing them from being delivered to a higher-layer 
+protocol.
+
+Device.WiFi.SSID.*.Stats.UnicastPacketsSent
+----------------------------------------------------------------
+The total number of packets requested for 
+transmission which were not addressed to a multicast or broadcast 
+address at this layer, including those that were discarded or not sent.
+
+Device.WiFi.SSID.*.Stats.UnicastPacketsReceived
+----------------------------------------------------------------
+The total number of received packets, delivered 
+by this layer to a higher layer, which were not addressed to a multicast
+ or broadcast address at this layer.
+
+Device.WiFi.SSID.*.Stats.DiscardPacketsSent
+----------------------------------------------------------------
+The total number of outbound packets which were 
+chosen to be discarded even though no errors had been detected to 
+prevent their being transmitted. One possible reason for discarding such
+ a packet could be to free up buffer space.
+
+Device.WiFi.SSID.*.Stats.DiscardPacketsReceived
+----------------------------------------------------------------
+The total number of inbound packets which were 
+chosen to be discarded even though no errors had been detected to  
+prevent their being delivered. One possible reason for discarding such a
+ packet could be to free up buffer space.
+
+Device.WiFi.SSID.*.Stats.MulticastPacketsSent
+----------------------------------------------------------------
+The total number of packets that higher-level 
+protocols requested for transmission and which were addressed to a 
+multicast address at this layer, including those that were discarded or 
+not sent.
+
+Device.WiFi.SSID.*.Stats.MulticastPacketsReceived
+----------------------------------------------------------------
+The total number of received packets, delivered 
+by this layer to a higher layer, which were addressed to a multicast 
+address at this layer.
+
+Device.WiFi.SSID.*.Stats.BroadcastPacketsSent
+----------------------------------------------------------------
+The total number of packets that higher-level 
+protocols requested for transmission and which were addressed to a 
+broadcast address at this layer, including those that were discarded or 
+not sent.
+
+Device.WiFi.SSID.*.Stats.BroadcastPacketsReceived
+----------------------------------------------------------------
+The total number of received packets, delivered 
+by this layer to a higher layer, which were addressed to a broadcast 
+address at this layer.
+
+Device.WiFi.SSID.*.Stats.UnknownProtoPacketsReceived
+----------------------------------------------------------------
+The total number of packets received via the 
+interface which were discarded because of an unknown or unsupported  
+protocol.
+
+Device.WiFi.AccessPoint.*.Enable
+----------------------------------------------------------------
+Enables or disables this access point.
+
+Device.WiFi.AccessPoint.*.Status
+----------------------------------------------------------------
+Indicates the status of this access point.  
+Enumeration of:
+Disabled
+  Enabled
+  Error_Misconfigured
+  Error
+ (OPTIONAL)
+
+The Error_Misconfigured value indicates that a necessary 
+configuration value is undefined or invalid.
+The Error value MAY be used by the CPE to indicate a locally 
+defined error condition.
+
+Device.WiFi.AccessPoint.*.Alias
+----------------------------------------------------------------
+A non-volatile handle used to reference this 
+instance. Alias provides a mechanism for an ACS to label this 
+instance for future reference. An initial unique value MUST be assigned 
+when the CPE creates an instance of this object.
+
+Device.WiFi.AccessPoint.*.SSIDReference
+----------------------------------------------------------------
+The value MUST be the path name of a row in the SSID table.  If the 
+referenced object is deleted, the parameter value MUST be set to an 
+empty string.  
+
+Device.WiFi.AccessPoint.*.SSIDAdvertisementEnabled
+----------------------------------------------------------------
+Indicates whether or not beacons include the 
+SSID name.
+
+Device.WiFi.AccessPoint.*.RetryLimit
+----------------------------------------------------------------
+The maximum number of retransmission for a 
+packet. This corresponds to IEEE 802.11 parameter dot11ShortRetryLimit.
+
+Device.WiFi.AccessPoint.*.WMMCapability
+----------------------------------------------------------------
+Indicates whether this access point supports 
+WiFi Multimedia (WMM) Access Categories (AC).
+
+Device.WiFi.AccessPoint.*.UAPSDCapability
+----------------------------------------------------------------
+Indicates whether this access point supports WMM
+ Unscheduled Automatic Power Save Delivery (U-APSD).
+Note: U-APSD support implies WMM support.
+
+Device.WiFi.AccessPoint.*.WMMEnable
+----------------------------------------------------------------
+Whether WMM support is currently enabled. When 
+enabled, this is indicated in beacon frames.
+
+Device.WiFi.AccessPoint.*.UAPSDEnable
+----------------------------------------------------------------
+Whether U-APSD support is currently enabled. 
+When enabled, this is indicated in beacon frames.
+Note: U-APSD can only be enabled if WMM is also enabled.
+
+Device.WiFi.AccessPoint.*.AssociatedDeviceNumberOfEntries
+----------------------------------------------------------------
+The number of entries in the AssociatedDevice
+ table.
+
+Device.WiFi.AccessPoint.*.Security.ModesSupported
+----------------------------------------------------------------
+Comma-separated list of strings. Indicates which
+ security modes this AccessPoint
+ instance is capable of supporting.  Each list item is an enumeration 
+of:
+None
+  WEP-64
+  WEP-128
+  WPA-Personal
+  WPA2-Personal
+  WPA-WPA2-Personal
+  WPA-Enterprise
+  WPA2-Enterprise
+  WPA-WPA2-Enterprise
+
+Device.WiFi.AccessPoint.*.Security.ModeEnabled
+----------------------------------------------------------------
+The value MUST be a member of the list reported 
+by the ModesSupported
+ parameter.    Indicates which security mode is enabled.
+
+Device.WiFi.AccessPoint.*.Security.WEPKey
+----------------------------------------------------------------
+A WEP key expressed as a hexadecimal string.
+WEPKey is used only if ModeEnabled
+ is set to WEP-64
+ or WEP-128.
+A 5 byte WEPKey corresponds to security mode WEP-64
+ and a 13 byte WEPKey corresponds to security mode WEP-128.
+When read, this parameter returns an empty string, regardless of the 
+actual value.
+
+Device.WiFi.AccessPoint.*.Security.PreSharedKey
+----------------------------------------------------------------
+A literal PreSharedKey (PSK) expressed as a 
+hexadecimal string.
+PreSharedKey is only used if ModeEnabled
+ is set to WPA-Personal
+ or WPA2-Personal
+ or WPA-WPA2-Personal.
+If KeyPassphrase
+ is written, then PreSharedKey is immediately generated. The ACS 
+SHOULD NOT set both the KeyPassphrase
+ and the PreSharedKey directly (the result of doing this is 
+undefined).
+When read, this parameter returns an empty string, regardless of the 
+actual value.
+
+Device.WiFi.AccessPoint.*.Security.KeyPassphrase
+----------------------------------------------------------------
+A passphrase from which the PreSharedKey
+ is to be generated, for WPA-Personal
+ or WPA2-Personal
+ or WPA-WPA2-Personal
+ security modes.
+If KeyPassphrase is written, then PreSharedKey
+ is immediately generated. The ACS SHOULD NOT set both the KeyPassphrase
+ and the PreSharedKey
+ directly (the result of doing this is undefined). The key is generated 
+as specified by WPA, which uses PBKDF2 from PKCS #5: Password-based 
+Cryptography Specification Version 2.0 ([RFC2898]).
+When read, this parameter returns an empty string, regardless of the 
+actual value.
+
+Device.WiFi.AccessPoint.*.Security.RekeyingInterval
+----------------------------------------------------------------
+The interval (expressed in seconds) in 
+which the keys are re-generated. 
+This is applicable to WPA, WPA2 and Mixed (WPA-WPA2) modes in Personal 
+or Enterprise mode (i.e. when ModeEnabled
+ is set to a value other than None
+ or WEP-64
+ or WEP-128.
+
+Device.WiFi.AccessPoint.*.Security.RadiusServerIPAddr
+----------------------------------------------------------------
+[IPAddress]   
+The IP Address of the RADIUS server used for WLAN security. RadiusServerIPAddr
+ is only applicable when ModeEnabled
+ is an Enterprise type (i.e. WPA-Enterprise,
+ WPA2-Enterprise
+ or WPA-WPA2-Enterprise).
+
+Device.WiFi.AccessPoint.*.Security.RadiusServerPort
+----------------------------------------------------------------
+The port number of the RADIUS server used for 
+WLAN security. RadiusServerPort is only applicable when ModeEnabled
+ is an Enterprise type (i.e. WPA-Enterprise,
+ WPA2-Enterprise
+ or WPA-WPA2-Enterprise).
+
+Device.WiFi.AccessPoint.*.Security.RadiusSecret
+----------------------------------------------------------------
+The secret used for handshaking with the RADIUS 
+server [RFC2865].
+When read, this parameter returns an empty string, regardless of the 
+actual value.
+
+Device.WiFi.AccessPoint.*.WPS.Enable
+----------------------------------------------------------------
+Enables or disables WPS functionality for this 
+access point.
+
+Device.WiFi.AccessPoint.*.WPS.ConfigMethodsSupported
+----------------------------------------------------------------
+Comma-separated list of strings. Indicates WPS 
+configuration methods supported by the device.  Each list item is an 
+enumeration of:
+USBFlashDrive
+  Ethernet
+  ExternalNFCToken
+  IntegratedNFCToken
+  NFCInterface
+  PushButton
+  PIN
+
+This parameter corresponds directly to the "Config Methods" attribute of
+ the WPS specification [WPSv1.0]. The PushButton
+ and PIN methods MUST be supported.
+
+Device.WiFi.AccessPoint.*.WPS.ConfigMethodsEnabled
+----------------------------------------------------------------
+Comma-separated list of strings.  Each list item
+ MUST be a member of the list reported by the ConfigMethodsSupported
+ parameter.   Indicates WPS configuration methods enabled on the device.
+
+Device.WiFi.AccessPoint.*.AssociatedDevice.*.MACAddress
+----------------------------------------------------------------
+[MACAddress] 
+  The MAC address of an associated device.
+
+Device.WiFi.AccessPoint.*.AssociatedDevice.*.AuthenticationState
+----------------------------------------------------------------
+Whether an associated device has authenticated (true)
+ or not (false).
+
+Device.WiFi.AccessPoint.*.AssociatedDevice.*.LastDataDownlinkRate
+----------------------------------------------------------------
+The data transmit rate in kbps that was 
+most recently used for transmission from the access point to the 
+associated device.
+
+Device.WiFi.AccessPoint.*.AssociatedDevice.*.LastDataUplinkRate
+----------------------------------------------------------------
+The data transmit rate in kbps that was 
+most recently used for transmission from the associated device to the 
+access point.
+
+Device.WiFi.AccessPoint.*.AssociatedDevice.*.SignalStrength
+----------------------------------------------------------------
+An indicator of radio signal strength of the 
+uplink from the associated device to the access point, measured in dBm,
+ as an average of the last 100 packets received from the device.
+
+Device.WiFi.AccessPoint.*.AssociatedDevice.*.Retransmissions
+----------------------------------------------------------------
+The number of packets that had to be 
+re-transmitted, from the last 100 packets sent to the associated device.
+ Multiple re-transmissions of the same packet count as one.
+
+Device.WiFi.AccessPoint.*.AssociatedDevice.*.Active
+----------------------------------------------------------------
+Whether or not this node is currently present in
+ the WiFi AccessPoint network.
+The ability to list inactive nodes is OPTIONAL. If the CPE includes 
+inactive nodes in this table, Active MUST be set to false 
+for each inactive node. The length of time an inactive node remains 
+listed in this table is a local matter to the CPE.
+
+Device.WiFi.EndPoint.*.Enable
+----------------------------------------------------------------
+Enables or disables this end point.
+
+Device.WiFi.EndPoint.*.Status
+----------------------------------------------------------------
+Indicates the status of this end point.  
+Enumeration of:
+Disabled
+  Enabled
+  Error_Misconfigured
+  Error
+ (OPTIONAL)
+
+The Error_Misconfigured value indicates that a necessary 
+configuration value is undefined or invalid.
+The Error value MAY be used by the CPE to indicate a locally 
+defined error condition.
+
+Device.WiFi.EndPoint.*.Alias
+----------------------------------------------------------------
+A non-volatile handle used to reference this 
+instance. Alias provides a mechanism for an ACS to label this 
+instance for future reference. An initial unique value MUST be assigned 
+when the CPE creates an instance of this object.
+
+Device.WiFi.EndPoint.*.ProfileReference
+----------------------------------------------------------------
+The value MUST be the path name of a row in the Profile
+ table.  If the referenced object is deleted, the parameter value MUST 
+be set to an empty string.   This is the currently active profile, which
+ specifies the SSID and security settings to be used by the end point.
+
+Device.WiFi.EndPoint.*.SSIDReference
+----------------------------------------------------------------
+The value MUST be the path name of a row in the SSID table.  If the 
+referenced object is deleted, the parameter value MUST be set to an 
+empty string.   SSIDReference is determined based on the Profile.{i}.SSID
+ within the associated ProfileReference)
+ endpoint profile. SSIDReference MUST be an empty string if ProfileReference
+ is an empty string (i.e. only when an active profile is assigned can 
+the associated SSID interface be determined).
+
+Device.WiFi.EndPoint.*.ProfileNumberOfEntries
+----------------------------------------------------------------
+The number of entries in the Profile
+ table.
+
+Device.WiFi.EndPoint.*.Stats.LastDataDownlinkRate
+----------------------------------------------------------------
+The data transmit rate in kbps that was 
+most recently used for transmission from the access point to the end 
+point device.
+
+Device.WiFi.EndPoint.*.Stats.LastDataUplinkRate
+----------------------------------------------------------------
+The data transmit rate in kbps that was 
+most recently used for transmission from the end point to the access 
+point device.
+
+Device.WiFi.EndPoint.*.Stats.SignalStrength
+----------------------------------------------------------------
+An indicator of radio signal strength of the 
+downlink from the access point to the end point, measured in dBm,
+ as an average of the last 100 packets received from the device.
+
+Device.WiFi.EndPoint.*.Stats.Retransmissions
+----------------------------------------------------------------
+The number of packets that had to be 
+re-transmitted, from the last 100 packets sent to the access point. 
+Multiple re-transmissions of the same packet count as one.
+
+Device.WiFi.EndPoint.*.Security.ModesSupported
+----------------------------------------------------------------
+Comma-separated list of strings. Indicates which
+ security modes this EndPoint
+ instance is capable of supporting.  Each list item is an enumeration 
+of:
+None
+  WEP-64
+  WEP-128
+  WPA-Personal
+  WPA2-Personal
+  WPA-WPA2-Personal
+  WPA-Enterprise
+  WPA2-Enterprise
+  WPA-WPA2-Enterprise
+
+Device.WiFi.EndPoint.*.Profile.*.Enable
+----------------------------------------------------------------
+Enables or disables this Profile.
+When there are multiple WiFi EndPoint Profiles, e.g. each instance 
+supports a different SSID and/or different security configuration, this 
+parameter can be used to control which of the instances are currently 
+enabled.
+
+Device.WiFi.EndPoint.*.Profile.*.Status
+----------------------------------------------------------------
+Indicates the status of this Profile.  
+Enumeration of:
+Active
+  Available
+  Error
+ (OPTIONAL)
+  Disabled
+
+The Active value is reserved for the instance that is actively 
+connected. The Available value represents an instance that is not
+ currently active, but is also not disabled or in error. The Error
+ value MAY be used by the CPE to indicate a locally defined error 
+condition.
+
+Device.WiFi.EndPoint.*.Profile.*.Alias
+----------------------------------------------------------------
+A non-volatile handle used to reference this 
+instance. Alias provides a mechanism for an ACS to label this 
+instance for future reference. An initial unique value MUST be assigned 
+when the CPE creates an instance of this object.
+
+Device.WiFi.EndPoint.*.Profile.*.SSID
+----------------------------------------------------------------
+The profile identifier in use by the connection.
+ The SSID is an identifier that is attached to packets sent over the 
+wireless LAN that functions as an ID for joining a particular radio 
+network (BSS).
+
+Device.WiFi.EndPoint.*.Profile.*.Location
+----------------------------------------------------------------
+Location of the profile. This value serves as a 
+reminder from the user, describing the location of the profile. For 
+example: "Home", "Office", "Neighbor House", "Airport", etc. An empty 
+string is also valid.
+
+Device.WiFi.EndPoint.*.Profile.*.Priority
+----------------------------------------------------------------
+The profile Priority defines one of the criteria
+ used by the End Point to automatically select the "best" AP when 
+several APs with known profiles are simultaneously available for 
+association.
+In this situation, the End Point has to select the AP with the higher 
+priority in its profile. If there are several APs with the same 
+priority, providing different SSID or the same SSID, then the wireless 
+end point has to select the APs according to other criteria like signal 
+quality, SNR, etc.
+0 is the highest priority.
+
+Device.WiFi.EndPoint.*.Profile.*.Security.ModeEnabled
+----------------------------------------------------------------
+The value MUST be a member of the list reported 
+by the Security.ModesSupported
+ parameter.    Indicates which security mode is enabled.
+
+Device.WiFi.EndPoint.*.Profile.*.Security.WEPKey
+----------------------------------------------------------------
+A WEP key expressed as a hexadecimal string.
+WEPKey is used only if ModeEnabled
+ is set to WEP-64
+ or WEP-128.
+A 5 byte WEPKey corresponds to security mode WEP-64
+ and a 13 byte WEPKey corresponds to security mode WEP-128.
+When read, this parameter returns an empty string, regardless of the 
+actual value.
+
+Device.WiFi.EndPoint.*.Profile.*.Security.PreSharedKey
+----------------------------------------------------------------
+A literal PreSharedKey (PSK) expressed as a 
+hexadecimal string.
+PreSharedKey is only used if ModeEnabled
+ is set to WPA-Personal
+ or WPA2-Personal
+ or WPA-WPA2-Personal.
+If KeyPassphrase
+ is written, then PreSharedKey is immediately generated. The ACS 
+SHOULD NOT set both the KeyPassphrase
+ and the PreSharedKey directly (the result of doing this is 
+undefined).
+When read, this parameter returns an empty string, regardless of the 
+actual value.
+
+Device.WiFi.EndPoint.*.Profile.*.Security.KeyPassphrase
+----------------------------------------------------------------
+A passphrase from which the PreSharedKey
+ is to be generated, for WPA-Personal
+ or WPA2-Personal
+ or WPA-WPA2-Personal
+ security modes.
+If KeyPassphrase is written, then PreSharedKey
+ is immediately generated. The ACS SHOULD NOT set both the KeyPassphrase
+ and the PreSharedKey
+ directly (the result of doing this is undefined). The key is generated 
+as specified by WPA, which uses PBKDF2 from PKCS #5: Password-based 
+Cryptography Specification Version 2.0 [RFC2898].
+When read, this parameter returns an empty string, regardless of the 
+actual value.
+
+Device.WiFi.EndPoint.*.WPS.Enable
+----------------------------------------------------------------
+Enables or disables WPS functionality for this 
+end point.
+
+Device.WiFi.EndPoint.*.WPS.ConfigMethodsSupported
+----------------------------------------------------------------
+Comma-separated list of strings. Indicates the 
+WPS configuration methods supported by the device.  Each list item is an
+ enumeration of:
+USBFlashDrive
+  Ethernet
+  ExternalNFCToken
+  IntegratedNFCToken
+  NFCInterface
+  PushButton
+  PIN
+
+This parameter corresponds directly to the "Config Methods" attribute of
+ the WPS specification [WPSv1.0].
+
+Device.WiFi.EndPoint.*.WPS.ConfigMethodsEnabled
+----------------------------------------------------------------
+Comma-separated list of strings.  Each list item
+ MUST be a member of the list reported by the ConfigMethodsSupported
+ parameter.   Indicates the WPS configuration methods enabled on the 
+device.
+

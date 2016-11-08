@@ -1,0 +1,542 @@
+<Device>
+    <InterfaceStack>
+        <*>
+            <HigherLayer dataType="Text" />
+            <LowerLayer dataType="Text" />
+            <HigherAlias dataType="Text" />
+            <LowerAlias dataType="Text" />
+        </*>
+    </InterfaceStack>
+    <Ethernet>
+        <InterfaceNumberOfEntries dataType="UInt32" />
+        <LinkNumberOfEntries dataType="UInt32" />
+        <VLANTerminationNumberOfEntries dataType="UInt32" />
+        <Interface>
+            <*>
+                <Enable dataType="Bool" />
+                <Status dataType="Text" />
+                <Alias dataType="Text" />
+                <Name dataType="Text" />
+                <LastChange dataType="UInt32" />
+                <LowerLayers dataType="Text" />
+                <Upstream dataType="Bool" />
+                <MACAddress dataType="Text" />
+                <MaxBitRate dataType="Int32" />
+                <DuplexMode dataType="Text" />
+                <Stats>
+                    <BytesSent dataType="UInt32" />
+                    <BytesReceived dataType="UInt32" />
+                    <PacketsSent dataType="UInt32" />
+                    <PacketsReceived dataType="UInt32" />
+                    <ErrorsSent dataType="UInt32" />
+                    <ErrorsReceived dataType="UInt32" />
+                    <UnicastPacketsSent dataType="UInt32" />
+                    <UnicastPacketsReceived dataType="UInt32" />
+                    <DiscardPacketsSent dataType="UInt32" />
+                    <DiscardPacketsReceived dataType="UInt32" />
+                    <MulticastPacketsSent dataType="UInt32" />
+                    <MulticastPacketsReceived dataType="UInt32" />
+                    <BroadcastPacketsSent dataType="UInt32" />
+                    <BroadcastPacketsReceived dataType="UInt32" />
+                    <UnknownProtoPacketsReceived dataType="UInt32" />
+                </Stats>
+            </*>
+        </Interface>
+        <Link>
+            <*>
+                <Enable dataType="Bool" />
+                <Status dataType="Text" />
+                <Alias dataType="Text" />
+                <Name dataType="Text" />
+                <LastChange dataType="UInt32" />
+                <LowerLayers dataType="Text" />
+                <MACAddress dataType="Text" />
+                <PriorityTagging dataType="Bool" />
+                <Stats>
+                    <BytesSent dataType="UInt32" />
+                    <BytesReceived dataType="UInt32" />
+                    <PacketsSent dataType="UInt32" />
+                    <PacketsReceived dataType="UInt32" />
+                    <ErrorsSent dataType="UInt32" />
+                    <ErrorsReceived dataType="UInt32" />
+                    <UnicastPacketsSent dataType="UInt32" />
+                    <UnicastPacketsReceived dataType="UInt32" />
+                    <DiscardPacketsSent dataType="UInt32" />
+                    <DiscardPacketsReceived dataType="UInt32" />
+                    <MulticastPacketsSent dataType="UInt32" />
+                    <MulticastPacketsReceived dataType="UInt32" />
+                    <BroadcastPacketsSent dataType="UInt32" />
+                    <BroadcastPacketsReceived dataType="UInt32" />
+                    <UnknownProtoPacketsReceived dataType="UInt32" />
+                </Stats>
+            </*>
+        </Link>
+        <VLANTermination>
+            <*>
+                <Enable dataType="Bool" />
+                <Status dataType="Text" />
+                <Alias dataType="Text" />
+                <Name dataType="Text" />
+                <LastChange dataType="UInt32" />
+                <LowerLayers dataType="Text" />
+                <VLANID dataType="UInt32" />
+                <Stats>
+                    <BytesSent dataType="UInt32" />
+                    <BytesReceived dataType="UInt32" />
+                    <PacketsSent dataType="UInt32" />
+                    <PacketsReceived dataType="UInt32" />
+                    <ErrorsSent dataType="UInt32" />
+                    <ErrorsReceived dataType="UInt32" />
+                    <UnicastPacketsSent dataType="UInt32" />
+                    <UnicastPacketsReceived dataType="UInt32" />
+                    <DiscardPacketsSent dataType="UInt32" />
+                    <DiscardPacketsReceived dataType="UInt32" />
+                    <MulticastPacketsSent dataType="UInt32" />
+                    <MulticastPacketsReceived dataType="UInt32" />
+                    <BroadcastPacketsSent dataType="UInt32" />
+                    <BroadcastPacketsReceived dataType="UInt32" />
+                    <UnknownProtoPacketsReceived dataType="UInt32" />
+                </Stats>
+            </*>
+        </VLANTermination>
+    </Ethernet>
+    <Bridging>
+        <MaxBridgeEntries dataType="UInt32" />
+        <MaxDBridgeEntries dataType="UInt32" />
+        <MaxQBridgeEntries dataType="UInt32" />
+        <MaxVLANEntries dataType="UInt32" />
+        <MaxFilterEntries dataType="UInt32" />
+        <BridgeNumberOfEntries dataType="UInt32" />
+        <FilterNumberOfEntries dataType="UInt32" />
+        <Bridge>
+            <*>
+                <Enable dataType="Bool" />
+                <Status dataType="Text" />
+                <Alias dataType="Text" />
+                <Standard dataType="Text" />
+                <PortNumberOfEntries dataType="UInt32" />
+                <VLANNumberOfEntries dataType="UInt32" />
+                <VLANPortNumberOfEntries dataType="UInt32" />
+                <Port>
+                    <*>
+                        <Enable dataType="Bool" />
+                        <Status dataType="Text" />
+                        <Alias dataType="Text" />
+                        <Name dataType="Text" />
+                        <LastChange dataType="UInt32" />
+                        <LowerLayers dataType="Text" />
+                        <ManagementPort dataType="Bool" />
+                        <DefaultUserPriority dataType="UInt32" />
+                        <PriorityRegeneration dataType="Text" />
+                        <PortState dataType="Text" />
+                        <PVID dataType="Int32" />
+                        <AcceptableFrameTypes dataType="Text" />
+                        <IngressFiltering dataType="Bool" />
+                        <PriorityTagging dataType="Bool" />
+                        <Stats>
+                            <BytesSent dataType="UInt32" />
+                            <BytesReceived dataType="UInt32" />
+                            <PacketsSent dataType="UInt32" />
+                            <PacketsReceived dataType="UInt32" />
+                            <ErrorsSent dataType="UInt32" />
+                            <ErrorsReceived dataType="UInt32" />
+                            <UnicastPacketsSent dataType="UInt32" />
+                            <UnicastPacketsReceived dataType="UInt32" />
+                            <DiscardPacketsSent dataType="UInt32" />
+                            <DiscardPacketsReceived dataType="UInt32" />
+                            <MulticastPacketsSent dataType="UInt32" />
+                            <MulticastPacketsReceived dataType="UInt32" />
+                            <BroadcastPacketsSent dataType="UInt32" />
+                            <BroadcastPacketsReceived dataType="UInt32" />
+                            <UnknownProtoPacketsReceived dataType="UInt32" />
+                        </Stats>
+                    </*>
+                </Port>
+                <VLAN>
+                    <*>
+                        <Enable dataType="Bool" />
+                        <Alias dataType="Text" />
+                        <Name dataType="Text" />
+                        <VLANID dataType="Int32" />
+                    </*>
+                </VLAN>
+                <VLANPort>
+                    <*>
+                        <Enable dataType="Bool" />
+                        <Alias dataType="Text" />
+                        <VLAN dataType="Text" />
+                        <Port dataType="Text" />
+                        <Untagged dataType="Bool" />
+                    </*>
+                </VLANPort>
+            </*>
+        </Bridge>
+        <Filter>
+            <*>
+                <Enable dataType="Bool" />
+                <Alias dataType="Text" />
+                <Status dataType="Text" />
+                <Bridge dataType="Text" />
+                <Order dataType="UInt32" />
+                <Interface dataType="Text" />
+                <DHCPType dataType="Text" />
+                <VLANIDFilter dataType="UInt32" />
+                <EthertypeFilterList dataType="Text" />
+                <EthertypeFilterExclude dataType="Bool" />
+                <SourceMACAddressFilterList dataType="Text" />
+                <SourceMACAddressFilterExclude dataType="Bool" />
+                <DestMACAddressFilterList dataType="Text" />
+                <DestMACAddressFilterExclude dataType="Bool" />
+                <SourceMACFromVendorClassIDFilter dataType="Text" />
+                <SourceMACFromVendorClassIDFilterv6 dataType="Text" />
+                <SourceMACFromVendorClassIDFilterExclude dataType="Bool" />
+                <SourceMACFromVendorClassIDMode dataType="Text" />
+                <DestMACFromVendorClassIDFilter dataType="Text" />
+                <DestMACFromVendorClassIDFilterv6 dataType="Text" />
+                <DestMACFromVendorClassIDFilterExclude dataType="Bool" />
+                <DestMACFromVendorClassIDMode dataType="Text" />
+                <SourceMACFromClientIDFilter dataType="Text" />
+                <SourceMACFromClientIDFilterExclude dataType="Bool" />
+                <DestMACFromClientIDFilter dataType="Text" />
+                <DestMACFromClientIDFilterExclude dataType="Bool" />
+                <SourceMACFromUserClassIDFilter dataType="Text" />
+                <SourceMACFromUserClassIDFilterExclude dataType="Bool" />
+                <DestMACFromUserClassIDFilter dataType="Text" />
+                <DestMACFromUserClassIDFilterExclude dataType="Bool" />
+            </*>
+        </Filter>
+    </Bridging>
+    <PPP>
+        <InterfaceNumberOfEntries dataType="UInt32" />
+        <SupportedNCPs dataType="Text" />
+        <Interface>
+            <*>
+                <Enable dataType="Bool" />
+                <Status dataType="Text" />
+                <Alias dataType="Text" />
+                <Name dataType="Text" />
+                <LastChange dataType="UInt32" />
+                <LowerLayers dataType="Text" />
+                <Reset dataType="Bool" />
+                <ConnectionStatus dataType="Text" />
+                <LastConnectionError dataType="Text" />
+                <AutoDisconnectTime dataType="UInt32" />
+                <IdleDisconnectTime dataType="UInt32" />
+                <WarnDisconnectDelay dataType="UInt32" />
+                <Username dataType="Text" />
+                <Password dataType="Text" />
+                <EncryptionProtocol dataType="Text" />
+                <CompressionProtocol dataType="Text" />
+                <AuthenticationProtocol dataType="Text" />
+                <MaxMRUSize dataType="UInt32" />
+                <CurrentMRUSize dataType="UInt32" />
+                <ConnectionTrigger dataType="Text" />
+                <LCPEcho dataType="UInt32" />
+                <LCPEchoRetry dataType="UInt32" />
+                <IPCPEnable dataType="Bool" />
+                <IPv6CPEnable dataType="Bool" />
+                <PPPoE>
+                    <SessionID dataType="UInt32" />
+                    <ACName dataType="Text" />
+                    <ServiceName dataType="Text" />
+                </PPPoE>
+                <IPCP>
+                    <LocalIPAddress dataType="Text" />
+                    <RemoteIPAddress dataType="Text" />
+                    <DNSServers dataType="Text" />
+                    <PassthroughEnable dataType="Bool" />
+                    <PassthroughDHCPPool dataType="Text" />
+                </IPCP>
+                <IPv6CP>
+                    <LocalInterfaceIdentifier dataType="Text" />
+                    <RemoteInterfaceIdentifier dataType="Text" />
+                </IPv6CP>
+                <Stats>
+                    <BytesSent dataType="UInt32" />
+                    <BytesReceived dataType="UInt32" />
+                    <PacketsSent dataType="UInt32" />
+                    <PacketsReceived dataType="UInt32" />
+                    <ErrorsSent dataType="UInt32" />
+                    <ErrorsReceived dataType="UInt32" />
+                    <UnicastPacketsSent dataType="UInt32" />
+                    <UnicastPacketsReceived dataType="UInt32" />
+                    <DiscardPacketsSent dataType="UInt32" />
+                    <DiscardPacketsReceived dataType="UInt32" />
+                    <MulticastPacketsSent dataType="UInt32" />
+                    <MulticastPacketsReceived dataType="UInt32" />
+                    <BroadcastPacketsSent dataType="UInt32" />
+                    <BroadcastPacketsReceived dataType="UInt32" />
+                    <UnknownProtoPacketsReceived dataType="UInt32" />
+                </Stats>
+            </*>
+        </Interface>
+    </PPP>
+    <IP>
+        <IPv4Capable dataType="Bool" />
+        <IPv4Enable dataType="Bool" />
+        <IPv4Status dataType="Text" />
+        <IPv6Capable dataType="Bool" />
+        <IPv6Enable dataType="Bool" />
+        <IPv6Status dataType="Text" />
+        <ULAPrefix dataType="Text" />
+        <InterfaceNumberOfEntries dataType="UInt32" />
+        <ActivePortNumberOfEntries dataType="UInt32" />
+        <Interface>
+            <*>
+                <Enable dataType="Bool" />
+                <IPv4Enable dataType="Bool" />
+                <IPv6Enable dataType="Bool" />
+                <ULAEnable dataType="Bool" />
+                <Status dataType="Text" />
+                <Alias dataType="Text" />
+                <Name dataType="Text" />
+                <LastChange dataType="UInt32" />
+                <LowerLayers dataType="Text" />
+                <Router dataType="Text" />
+                <Reset dataType="Bool" />
+                <MaxMTUSize dataType="UInt32" />
+                <Type dataType="Text" />
+                <Loopback dataType="Bool" />
+                <IPv4AddressNumberOfEntries dataType="UInt32" />
+                <IPv6AddressNumberOfEntries dataType="UInt32" />
+                <IPv6PrefixNumberOfEntries dataType="UInt32" />
+                <AutoIPEnable dataType="Bool" />
+                <IPv4Address>
+                    <*>
+                        <Enable dataType="Bool" />
+                        <Status dataType="Text" />
+                        <Alias dataType="Text" />
+                        <IPAddress dataType="Text" />
+                        <SubnetMask dataType="Text" />
+                        <AddressingType dataType="Text" />
+                    </*>
+                </IPv4Address>
+                <IPv6Address>
+                    <*>
+                        <Enable dataType="Bool" />
+                        <Status dataType="Text" />
+                        <IPAddressStatus dataType="Text" />
+                        <Alias dataType="Text" />
+                        <IPAddress dataType="Text" />
+                        <Origin dataType="Text" />
+                        <Prefix dataType="Text" />
+                        <PreferredLifetime/>
+                        <ValidLifetime/>
+                        <Anycast dataType="Bool" />
+                    </*>
+                </IPv6Address>
+                <IPv6Prefix>
+                    <*>
+                        <Enable dataType="Bool" />
+                        <Status dataType="Text" />
+                        <PrefixStatus dataType="Text" />
+                        <Alias dataType="Text" />
+                        <Prefix dataType="Text" />
+                        <Origin dataType="Text" />
+                        <StaticType dataType="Text" />
+                        <ParentPrefix dataType="Text" />
+                        <ChildPrefixBits dataType="Text" />
+                        <OnLink dataType="Bool" />
+                        <Autonomous dataType="Bool" />
+                        <PreferredLifetime/>
+                        <ValidLifetime/>
+                    </*>
+                </IPv6Prefix>
+                <Stats>
+                    <BytesSent dataType="UInt32" />
+                    <BytesReceived dataType="UInt32" />
+                    <PacketsSent dataType="UInt32" />
+                    <PacketsReceived dataType="UInt32" />
+                    <ErrorsSent dataType="UInt32" />
+                    <ErrorsReceived dataType="UInt32" />
+                    <UnicastPacketsSent dataType="UInt32" />
+                    <UnicastPacketsReceived dataType="UInt32" />
+                    <DiscardPacketsSent dataType="UInt32" />
+                    <DiscardPacketsReceived dataType="UInt32" />
+                    <MulticastPacketsSent dataType="UInt32" />
+                    <MulticastPacketsReceived dataType="UInt32" />
+                    <BroadcastPacketsSent dataType="UInt32" />
+                    <BroadcastPacketsReceived dataType="UInt32" />
+                    <UnknownProtoPacketsReceived dataType="UInt32" />
+                </Stats>
+            </*>
+        </Interface>
+        <ActivePort>
+            <*>
+                <LocalIPAddress dataType="Text" />
+                <LocalPort dataType="UInt32" />
+                <RemoteIPAddress dataType="Text" />
+                <RemotePort dataType="UInt32" />
+                <Status dataType="Text" />
+            </*>
+        </ActivePort>
+        <Diagnostics>
+            <IPPing>
+                <DiagnosticsState dataType="Text" />
+                <Interface dataType="Text" />
+                <Host dataType="Text" />
+                <NumberOfRepetitions dataType="UInt32" />
+                <Timeout dataType="UInt32" />
+                <DataBlockSize dataType="UInt32" />
+                <DSCP dataType="UInt32" />
+                <SuccessCount dataType="UInt32" />
+                <FailureCount dataType="UInt32" />
+                <AverageResponseTime dataType="UInt32" />
+                <MinimumResponseTime dataType="UInt32" />
+                <MaximumResponseTime dataType="UInt32" />
+            </IPPing>
+            <TraceRoute>
+                <DiagnosticsState dataType="Text" />
+                <Interface dataType="Text" />
+                <Host dataType="Text" />
+                <NumberOfTries dataType="UInt32" />
+                <Timeout dataType="UInt32" />
+                <DataBlockSize dataType="UInt32" />
+                <DSCP dataType="UInt32" />
+                <MaxHopCount dataType="UInt32" />
+                <ResponseTime dataType="UInt32" />
+                <RouteHopsNumberOfEntries dataType="UInt32" />
+                <RouteHops>
+                    <*>
+                        <Host dataType="Text" />
+                        <HostAddress dataType="Text" />
+                        <ErrorCode dataType="UInt32" />
+                        <RTTimes dataType="Text" />
+                    </*>
+                </RouteHops>
+            </TraceRoute>
+            <DownloadDiagnostics>
+                <DiagnosticsState dataType="Text" />
+                <Interface dataType="Text" />
+                <DownloadURL dataType="Text" />
+                <DownloadTransports dataType="Text" />
+                <DSCP dataType="UInt32" />
+                <EthernetPriority dataType="UInt32" />
+                <ROMTime/>
+                <BOMTime/>
+                <EOMTime/>
+                <TestBytesReceived dataType="UInt32" />
+                <TotalBytesReceived dataType="UInt32" />
+                <TCPOpenRequestTime/>
+                <TCPOpenResponseTime/>
+            </DownloadDiagnostics>
+            <UploadDiagnostics>
+                <DiagnosticsState dataType="Text" />
+                <Interface dataType="Text" />
+                <UploadURL dataType="Text" />
+                <UploadTransports dataType="Text" />
+                <DSCP dataType="UInt32" />
+                <EthernetPriority dataType="UInt32" />
+                <TestFileLength dataType="UInt32" />
+                <ROMTime/>
+                <BOMTime/>
+                <EOMTime/>
+                <TotalBytesSent dataType="UInt32" />
+                <TCPOpenRequestTime/>
+                <TCPOpenResponseTime/>
+            </UploadDiagnostics>
+            <UDPEchoConfig>
+                <Enable dataType="Bool" />
+                <Interface dataType="Text" />
+                <SourceIPAddress dataType="Text" />
+                <UDPPort dataType="UInt32" />
+                <EchoPlusEnabled dataType="Bool" />
+                <EchoPlusSupported dataType="Bool" />
+                <PacketsReceived dataType="UInt32" />
+                <PacketsResponded dataType="UInt32" />
+                <BytesReceived dataType="UInt32" />
+                <BytesResponded dataType="UInt32" />
+                <TimeFirstPacketReceived/>
+                <TimeLastPacketReceived/>
+            </UDPEchoConfig>
+        </Diagnostics>
+    </IP>
+    <Routing>
+        <RouterNumberOfEntries dataType="UInt32" />
+        <Router>
+            <*>
+                <Enable dataType="Bool" />
+                <Status dataType="Text" />
+                <Alias dataType="Text" />
+                <IPv4ForwardingNumberOfEntries dataType="UInt32" />
+                <IPv6ForwardingNumberOfEntries dataType="UInt32" />
+                <IPv4Forwarding>
+                    <*>
+                        <Enable dataType="Bool" />
+                        <Status dataType="Text" />
+                        <Alias dataType="Text" />
+                        <StaticRoute dataType="Bool" />
+                        <DestIPAddress dataType="Text" />
+                        <DestSubnetMask dataType="Text" />
+                        <ForwardingPolicy dataType="Int32" />
+                        <GatewayIPAddress dataType="Text" />
+                        <Interface dataType="Text" />
+                        <Origin dataType="Text" />
+                        <ForwardingMetric dataType="Int32" />
+                    </*>
+                </IPv4Forwarding>
+                <IPv6Forwarding>
+                    <*>
+                        <Enable dataType="Bool" />
+                        <Status dataType="Text" />
+                        <Alias dataType="Text" />
+                        <DestIPPrefix dataType="Text" />
+                        <ForwardingPolicy dataType="Int32" />
+                        <NextHop dataType="Text" />
+                        <Interface dataType="Text" />
+                        <Origin dataType="Text" />
+                        <ForwardingMetric dataType="Int32" />
+                        <ExpirationTime/>
+                    </*>
+                </IPv6Forwarding>
+            </*>
+        </Router>
+        <RIP>
+            <Enable dataType="Bool" />
+            <SupportedModes dataType="Text" />
+            <InterfaceSettingNumberOfEntries dataType="UInt32" />
+            <InterfaceSetting>
+                <*>
+                    <Enable dataType="Bool" />
+                    <Status dataType="Text" />
+                    <Alias dataType="Text" />
+                    <Interface dataType="Text" />
+                    <AcceptRA dataType="Bool" />
+                    <SendRA dataType="Bool" />
+                </*>
+            </InterfaceSetting>
+        </RIP>
+        <RouteInformation>
+            <Enable dataType="Bool" />
+            <InterfaceSettingNumberOfEntries dataType="UInt32" />
+            <InterfaceSetting>
+                <*>
+                    <Status dataType="Text" />
+                    <Interface dataType="Text" />
+                    <SourceRouter dataType="Text" />
+                    <PreferredRouteFlag dataType="Text" />
+                    <Prefix dataType="Text" />
+                    <RouteLifetime/>
+                </*>
+            </InterfaceSetting>
+        </RouteInformation>
+    </Routing>
+    <IPv6rd>
+        <Enable dataType="Bool" />
+        <InterfaceSettingNumberOfEntries dataType="UInt32" />
+        <InterfaceSetting>
+            <*>
+                <Enable dataType="Bool" />
+                <Status dataType="Text" />
+                <Alias dataType="Text" />
+                <BorderRelayIPv4Addresses dataType="Text" />
+                <AllTrafficToBorderRelay dataType="Bool" />
+                <SPIPv6Prefix dataType="Text" />
+                <IPv4MaskLength dataType="UInt32" />
+                <AddressSource dataType="Text" />
+                <TunnelInterface dataType="Text" />
+                <TunneledInterface dataType="Text" />
+            </*>
+        </InterfaceSetting>
+    </IPv6rd>
+</Device>

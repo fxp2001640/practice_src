@@ -1,0 +1,17 @@
+
+#header {
+	text-align:center;
+}
+
+#comContent {
+	background-color:#eeeeee;
+	height:600px;
+	width:600px;
+	float:left;
+}
+
+#comCommand {
+	height:600px;
+	width:200px;
+	float:left;
+}

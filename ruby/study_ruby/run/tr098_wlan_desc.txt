@@ -1,0 +1,922 @@
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Enable
+----------------------------------------------------------------
+Enables or disables this interface.
+When there are multiple WLANConfiguration instances, e.g. each 
+instance supports a different 802.11 standard or has a different 
+security configuration, this parameter can be used to control which of 
+the instances are currently enabled.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Status
+----------------------------------------------------------------
+Indicates the status of this interface.  
+Enumeration of:
+Up
+  Error
+ (OPTIONAL)
+  Disabled
+
+The Error value MAY be used by the CPE to indicate a locally 
+defined error condition.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Alias
+----------------------------------------------------------------
+A non-volatile handle used to reference this 
+instance. Alias provides a mechanism for an ACS to label this instance 
+for future reference.
+If the CPE supports the Alias-based Addressing feature as defined in 
+[Section 3.6.1/TR-069a4] and described in 
+[Appendix II/TR-069a4], the following 
+mandatory constraints MUST be enforced:
+Its value MUST NOT be empty.
+  Its value MUST start with a letter.
+  If its instance object is created by the CPE, the initial 
+value MUST start with a "cpe-" prefix.
+  The CPE MUST NOT change the parameter value.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Name
+----------------------------------------------------------------
+The name of this layer 2 interface, chosen by 
+the vendor, e.g. "wlan0".
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.BSSID
+----------------------------------------------------------------
+The MAC address of the interface.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.MaxBitRate
+----------------------------------------------------------------
+The maximum upstream and downstream bit rate 
+available to this connection in Mbps.  Either Auto, or the 
+largest of the OperationalDataTransmitRates
+ values.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Channel
+----------------------------------------------------------------
+The current radio channel used by the 
+connection.  To request automatic channel selection, set AutoChannelEnable
+ to true.
+Whenever AutoChannelEnable
+ is true, the value of the Channel parameter MUST be the 
+channel selected by the automatic channel selection procedure.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.AutoChannelEnable
+----------------------------------------------------------------
+Enable or disable automatic channel selection.
+Set to false to disable the automatic channel selection 
+procedure, in which case the currently selected channel remains 
+selected.
+Set to true to enable the automatic channel selection procedure. 
+ This procedure MUST automatically select the channel, and MAY also 
+change it subsequently.
+AutoChannelEnable MUST automatically change to false 
+whenever the channel is manually selected, i.e. whenever the Channel
+ parameter is written.
+Whenever AutoChannelEnable is true, the value of the Channel
+ parameter MUST be the channel selected by the automatic channel 
+selection procedure.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.SSID
+----------------------------------------------------------------
+The current service set identifier in use by the
+ connection.  The SSID is an identifier that is attached to packets sent
+ over the wireless LAN that functions as a "password" for joining a 
+particular radio network (BSS).  Note: If an access point wishes to be 
+known by more than one SSID, it MUST provide a WLANConfiguration 
+instance for each SSID.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.BeaconType
+----------------------------------------------------------------
+The capabilities that are currently enabled on 
+the access point (and that are announced via beacons if BeaconAdvertisementEnabled
+ is true). Write access to this parameter enables and disables 
+such capabilities.
+An attempt to set this parameter to one of the REQUIRED (mandatory) 
+values MAY be rejected if (and only if) the requested capability is not 
+available on this WLANConfiguration instance but is available on another
+ WLANConfiguration instance within this Internet Gateway Device. For 
+example, only basic 802.11 might be supported by one virtual AP, and 
+only WPA might be supported by another virtual AP.
+A value of None means that no capabilities are currently enabled 
+on the access point and that no stations will be able to associate with 
+it.  Enumeration of:
+None
+  Basic
+  WPA
+  11i
+ (OPTIONAL)
+  BasicandWPA
+ (OBSOLETED)
+  Basicand11i
+ (OBSOLETED)
+  WPAand11i
+ (OPTIONAL)
+  BasicandWPAand11i
+ (OBSOLETED)
+
+11i SHOULD be taken to refer to both the 802.11i specification 
+and to the WPA2 specification (any WPA2-certified device will implement 
+all mandatory parts of the 802.11i standard).
+The OBSOLETED values are those for Basic + WPA/WPA2  mixed modes, which 
+are not permitted by the WPA specifications.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.MACAddressControlEnabled
+----------------------------------------------------------------
+Indicates whether MAC Address Control is enabled
+ or not on this interface.  MAC Address Control limits the clients that 
+connect to those that match a list of allowed MAC addresses specified in
+ InternetGatewayDevice.LANDevice.{i}.LANHostConfigManagement.AllowedMACAddresses.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Standard
+----------------------------------------------------------------
+Indicates which IEEE 802.11 standard this WLANConfiguration
+ instance is configured for.  Enumeration of:
+a
+  b
+  g
+ (b and g clients supported)
+  g-only
+ (only g clients supported)
+  n
+
+Where each value indicates support for only the indicated standard.
+If the device is configured simultaneously for more than one standard, a
+ separate WLANConfiguration instance MUST be used for each 
+supported standard.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WEPKeyIndex
+----------------------------------------------------------------
+The index of the default WEP key.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.KeyPassphrase
+----------------------------------------------------------------
+A passphrase from which the WEP keys are to be 
+generated.
+This parameter is the same as the parameter InternetGatewayDevice.LANDevice.{i}.WLANConfiguration.{i}.PreSharedKey.1.KeyPassphrase
+ for the same instance of WLANConfiguration.  When either 
+parameter is changed, the value of the other is changed as well.
+If KeyPassphrase is written, all four WEP keys are immediately 
+generated.  The ACS SHOULD NOT set the passphrase and also set the WEP 
+keys directly (the result of doing this is undefined).
+This MUST either be a valid key length divided by 8, in which case each 
+byte contributes 8 bits to the key, or else MUST consist of Hex digits 
+and be a valid key length divided by 4, in which case each byte 
+contributes 4 bits to the key.
+Note: If a passphrase is used, all four WEP keys will be the same.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WEPEncryptionLevel
+----------------------------------------------------------------
+Comma-separated list (maximum length 64) of 
+strings.  Supported key lengths.  Each list item is an enumeration of:
+Disabled
+  40-bit
+  104-bit
+
+Any additional vendor-specific values MUST start with the key length in 
+bits.
+This parameter does not enforce a given encryption level but only 
+indicates capabilities.  The WEP encryption level for a given key is 
+inferred from the key length.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.BasicEncryptionModes
+----------------------------------------------------------------
+Encryption modes that are available when basic 
+802.11 is enabled. WEPEncryption implies that all wireless 
+clients can use WEP for data encryption.  Enumeration of:
+None
+  WEPEncryption
+
+If this WLANConfiguration instance does not support basic 802.11 
+then this parameter MUST NOT be present in this instance of the WLANConfiguration
+ object.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.BasicAuthenticationMode
+----------------------------------------------------------------
+Authentication modes that are available when 
+basic 802.11 is enabled.  Enumeration of:
+None
+ (Open authentication)
+  EAPAuthentication
+ (OPTIONAL)
+  SharedAuthentication
+ (OPTIONAL)
+
+If this WLANConfiguration instance does not support basic 802.11 
+then this parameter MUST NOT be present in this instance of the WLANConfiguration
+ object.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPAEncryptionModes
+----------------------------------------------------------------
+Encryption modes that are available when WPA is 
+enabled.  Enumeration of:
+WEPEncryption
+ (DEPRECATED)
+  TKIPEncryption
+  WEPandTKIPEncryption
+ (DEPRECATED)
+  AESEncryption
+ (OPTIONAL)
+  WEPandAESEncryption
+ (DEPRECATED)
+  TKIPandAESEncryption
+ (OPTIONAL)
+  WEPandTKIPandAESEncryption
+ (DEPRECATED)
+
+If this WLANConfiguration instance does not support WPA then this
+ parameter MUST NOT be present in this instance of the WLANConfiguration
+ object.
+The DEPRECATED values are those that combine WEP with TKIP and/or AES, 
+which is not permitted by the WPA specifications.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPAAuthenticationMode
+----------------------------------------------------------------
+Authentication modes that are available when WPA
+ is enabled.  Enumeration of:
+PSKAuthentication
+  EAPAuthentication
+ (OPTIONAL)
+
+If this WLANConfiguration instance does not support WPA then this
+ parameter MUST NOT be present in this instance of the WLANConfiguration
+ object.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.IEEE11iEncryptionModes
+----------------------------------------------------------------
+Encryption modes that are available when 802.11i
+ is enabled.  Enumeration of:
+WEPEncryption
+ (DEPRECATED)
+  TKIPEncryption
+ (OPTIONAL)
+  WEPandTKIPEncryption
+ (DEPRECATED)
+  AESEncryption
+  WEPandAESEncryption
+ (DEPRECATED)
+  TKIPandAESEncryption
+ (OPTIONAL)
+  WEPandTKIPandAESEncryption
+ (DEPRECATED)
+
+If this WLANConfiguration instance does not support 802.11i then 
+this parameter MUST NOT be present in this instance of the WLANConfiguration
+ object.
+IEEE11i SHOULD be taken to refer to both the 802.11i 
+specification and to the WPA2 specification (any WPA2-certified device 
+will implement all mandatory parts of the 802.11i standard).
+The DEPRECATED values are those that combine WEP with TKIP and/or AES, 
+which is not permitted by the WPA2 specifications.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.IEEE11iAuthenticationMode
+----------------------------------------------------------------
+Authentication modes that are available when 
+802.11i is enabled.  Enumeration of:
+PSKAuthentication
+  EAPAuthentication
+ (OPTIONAL)
+  EAPandPSKAuthentication
+ (OPTIONAL)
+
+If this WLANConfiguration instance does not support 802.11i then 
+this parameter MUST NOT be present in this instance of the WLANConfiguration
+ object.
+IEEE11i SHOULD be taken to refer to both the 802.11i 
+specification and to the WPA2 specification (any WPA2-certified device 
+will implement all mandatory parts of the 802.11i standard).
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.PossibleChannels
+----------------------------------------------------------------
+Comma-separated list (maximum length 1024) of 
+strings.  Possible radio channels for the wireless standard (a, b or g) 
+and the regulatory domain. 
+Ranges in the form "n-m" are permitted.
+For example, for 802.11b and North America, would be "1-11".
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.BasicDataTransmitRates
+----------------------------------------------------------------
+Comma-separated list (maximum length 256) of 
+strings.  Maximum access point data transmit rates in Mbps for unicast, 
+multicast and broadcast frames.
+For example, a value of "1,2", indicates that unicast, multicast and 
+broadcast frames can be transmitted at 1 Mbps and 2 Mbps.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.OperationalDataTransmitRates
+----------------------------------------------------------------
+Comma-separated list (maximum length 256) of 
+strings.  Maximum access point data transmit rates in Mbps for unicast 
+frames (a superset of BasicDataTransmitRates).
+Given the value of BasicDataTransmitRates
+ from the example above, OperationalDataTransmitRates might be 
+"1,2,5.5,11", indicating that unicast frames can additionally be 
+transmitted at 5.5 Mbps and 11 Mbps.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.PossibleDataTransmitRates
+----------------------------------------------------------------
+Comma-separated list (maximum length 256) of 
+strings.  Data transmit rates for unicast frames at which the access 
+point will permit a station to connect (a subset of OperationalDataTransmitRates).
+Given the values of BasicDataTransmitRates
+ and OperationalDataTransmitRates
+ from the examples above, PossibleDataTransmitRates might be 
+"1,2,5.5", indicating that the AP will only permit connections at 1 
+Mbps, 2 Mbps and 5.5 Mbps, even though it could theoretically accept 
+connections at 11 Mbps.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.InsecureOOBAccessEnabled
+----------------------------------------------------------------
+Indicates whether insecure write access via 
+mechanisms other than the CPE WAN Management Protocol is permitted to 
+the parameters in this object.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.BeaconAdvertisementEnabled
+----------------------------------------------------------------
+Indicates whether or not the access point is 
+sending out beacons.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.SSIDAdvertisementEnabled
+----------------------------------------------------------------
+Indicates whether or not beacons include the 
+SSID name.
+This parameter has an effect only if BeaconAdvertisementEnabled
+ is true.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.RadioEnabled
+----------------------------------------------------------------
+Indicates whether or not the access point radio 
+is enabled.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.TransmitPowerSupported
+----------------------------------------------------------------
+Comma-separated list (maximum length 64) of 
+unsigned integers (value 0 to 100).  Supported transmit power levels as 
+percentages of full power.  For example, "0,25,50,75,100".
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.TransmitPower
+----------------------------------------------------------------
+Indicates the current transmit power level as a 
+percentage of full power.  The value MUST be one of the values reported 
+by the TransmitPowerSupported
+ parameter.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.AutoRateFallBackEnabled
+----------------------------------------------------------------
+Indicates whether the access point can 
+automatically reduce the data rate in the event of undue noise or 
+contention.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.LocationDescription
+----------------------------------------------------------------
+An XML description of information used to 
+identify the access point by name and physical location.  The CPE is not
+ expected to parse this string, but simply to treat it as an opaque 
+string.  An empty string indicates no location has been set.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.RegulatoryDomain
+----------------------------------------------------------------
+802.11d Regulatory Domain String.  First two 
+octets are ISO/IEC 3166-1 two-character country code.  The third octet 
+is either " " (all environments), "O" (outside) or "I" (inside).
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.TotalPSKFailures
+----------------------------------------------------------------
+The number of times pre-shared key (PSK) 
+authentication has failed (relevant only to WPA and 802.11i).
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.TotalIntegrityFailures
+----------------------------------------------------------------
+The number of times the MICHAEL integrity check 
+has failed (relevant only to WPA and 802.11i)
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.ChannelsInUse
+----------------------------------------------------------------
+Comma-separated list (maximum length 1024) of 
+strings.  Channels that the access point determines to be currently in 
+use (including any that it is using itself).
+Ranges in the form "n-m" are permitted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.DeviceOperationMode
+----------------------------------------------------------------
+The current access-point operating mode.  The 
+OPTIONAL modes permit the AP to be configured as a wireless bridge (to 
+bridge two wired networks), repeater (a bridge that also serves wireless
+ clients), or wireless station. Ad hoc stations are not supported.  
+Enumeration of:
+InfrastructureAccessPoint
+  WirelessBridge
+ (OPTIONAL)
+  WirelessRepeater
+ (OPTIONAL)
+  WirelessStation
+ (OPTIONAL)
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.DistanceFromRoot
+----------------------------------------------------------------
+The number of hops from the root access point to
+ the wireless repeater or bridge.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.PeerBSSID
+----------------------------------------------------------------
+The MAC address of the peer in wireless repeater
+ or bridge mode.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.AuthenticationServiceMode
+----------------------------------------------------------------
+Indicates whether another service is involved in
+ client authentication (LinkAuthentication for a co-located 
+authentication server; RadiusClient for an external RADIUS 
+server).  Enumeration of:
+None
+  LinkAuthentication
+ (OPTIONAL)
+  RadiusClient
+ (OPTIONAL)
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WMMSupported
+----------------------------------------------------------------
+Indicates whether this interface supports WiFi 
+Multimedia (WMM) Access Categories (AC).
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.UAPSDSupported
+----------------------------------------------------------------
+Indicates whether this interface supports WMM 
+Unscheduled Automatic Power Save Delivery (U-APSD).
+Note: U-APSD support implies WMM support.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WMMEnable
+----------------------------------------------------------------
+Whether WMM support is currently enabled.  When 
+enabled, this is indicated in beacon frames
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.UAPSDEnable
+----------------------------------------------------------------
+Whether U-APSD support is currently enabled.  
+When enabled, this is indicated in beacon frames.
+Note: U-APSD can only be enabled if WMM is also enabled.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.TotalBytesSent
+----------------------------------------------------------------
+The total number of bytes transmitted out of the
+ interface, including framing characters. 
+The value of this counter MAY be reset to zero when the CPE is rebooted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.TotalBytesReceived
+----------------------------------------------------------------
+The total number of bytes received on the 
+interface, including framing characters. 
+The value of this counter MAY be reset to zero when the CPE is rebooted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.TotalPacketsSent
+----------------------------------------------------------------
+The total number of packets transmitted out of 
+the interface.
+The value of this counter MAY be reset to zero when the CPE is rebooted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.TotalPacketsReceived
+----------------------------------------------------------------
+The total number of packets which were received 
+on this interface.
+The value of this counter MAY be reset to zero when the CPE is rebooted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.TotalAssociations
+----------------------------------------------------------------
+The number of devices currently associated with 
+the access point.  This corresponds to the number of entries in the 
+AssociatedDevice table.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Stats.ErrorsSent
+----------------------------------------------------------------
+The total number of outbound packets that could 
+not be transmitted because of errors. 
+The value of this counter MAY be reset to zero when the CPE is rebooted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Stats.ErrorsReceived
+----------------------------------------------------------------
+The total number of inbound packets that 
+contained errors preventing them from being deliverable. 
+The value of this counter MAY be reset to zero when the CPE is rebooted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Stats.UnicastPacketsSent
+----------------------------------------------------------------
+The total number of packets requested for 
+transmission which were not addressed to a multicast or broadcast 
+address, including those that were discarded or not sent. 
+The value of this counter MAY be reset to zero when the CPE is rebooted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Stats.UnicastPacketsReceived
+----------------------------------------------------------------
+The total number of received packets which were 
+not addressed to a multicast or broadcast address. 
+The value of this counter MAY be reset to zero when the CPE is rebooted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Stats.DiscardPacketsSent
+----------------------------------------------------------------
+The total number of outbound packets which were 
+chosen to be discarded even though no errors had been detected to 
+prevent their being transmitted.  One possible reason for discarding 
+such a packet could be to free up buffer space. 
+The value of this counter MAY be reset to zero when the CPE is rebooted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Stats.DiscardPacketsReceived
+----------------------------------------------------------------
+The total number of inbound packets which were 
+chosen to be discarded even though no errors had been detected to 
+prevent their being deliverable.  One possible reason for discarding 
+such a packet could be to free up buffer space. 
+The value of this counter MAY be reset to zero when the CPE is rebooted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Stats.MulticastPacketsSent
+----------------------------------------------------------------
+The total number of packets requested for 
+transmission which were addressed to a multicast address, including 
+those that were discarded or not sent.
+The value of this counter MAY be reset to zero when the CPE is rebooted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Stats.MulticastPacketsReceived
+----------------------------------------------------------------
+The total number of received packets which were 
+addressed to a multicast address.
+The value of this counter MAY be reset to zero when the CPE is rebooted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Stats.BroadcastPacketsSent
+----------------------------------------------------------------
+The total number of packets requested for 
+transmission which were addressed to a broadcast address, including 
+those that were discarded or not sent.
+The value of this counter MAY be reset to zero when the CPE is rebooted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Stats.BroadcastPacketsReceived
+----------------------------------------------------------------
+The total number of received packets which were 
+addressed to a broadcast address.
+The value of this counter MAY be reset to zero when the CPE is rebooted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.Stats.UnknownProtoPacketsReceived
+----------------------------------------------------------------
+The total number of packets received via the 
+interface which were discarded because of an unknown or unsupported 
+protocol.
+The value of this counter MAY be reset to zero when the CPE is rebooted.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.Enable
+----------------------------------------------------------------
+Enables or disables WPS functionality for this 
+interface.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.DeviceName
+----------------------------------------------------------------
+User-friendly description of the device.
+This parameter corresponds directly to the "Device Name" attribute of 
+the WPS specification [WPSv1.0].
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.DevicePassword
+----------------------------------------------------------------
+Represents the DevicePassword used (commonly 
+known as PIN).
+This parameter corresponds directly to the "Device Password" attribute 
+of the WPS specification [WPSv1.0].
+When read, this parameter returns 0, regardless of the actual value.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.UUID
+----------------------------------------------------------------
+UUID of the device. This is represented as 
+specified in RFC 4122 [RFC4122] but omitting 
+the leading "urn:uuid:", e.g. "f81d4fae-7dec-11d0-a765-00a0c91e6bf6".
+This parameter corresponds directly to the "UUID-E" (enrollee) and 
+"UUID-R" (registrar) attributes of the WPS specification [WPSv1.0].  Note that if the Access Point can act 
+both as an enrollee and as a registrar then UUID-E and UUID-R will be 
+the same as each other.  Possible patterns:
+[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.Version
+----------------------------------------------------------------
+The Wi-Fi Protected Setup version supported by 
+the device.
+This parameter corresponds directly to the "Version" attribute of the 
+WPS specification [WPSv1.0].
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.ConfigMethodsSupported
+----------------------------------------------------------------
+Comma-separated list of strings.  WPS 
+configuration methods supported by the device.  Each list item is an 
+enumeration of:
+USBFlashDrive
+  Ethernet
+  Label
+  Display
+  ExternalNFCToken
+  IntegratedNFCToken
+  NFCInterface
+  PushButton
+  Keypad
+
+This parameter corresponds directly to the "Config Methods" attribute of
+ the WPS specification [WPSv1.0].
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.ConfigMethodsEnabled
+----------------------------------------------------------------
+Comma-separated list of strings.  Each list item
+ MUST be a member of the list reported by the ConfigMethodsSupported
+ parameter.    WPS configuration methods enabled on the device.  This 
+parameter corresponds directly to the "Permitted Config Methods" 
+attribute of the WPS specification [WPSv1.0].
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.SetupLockedState
+----------------------------------------------------------------
+Indicates if the AP Setup mode is enabled for 
+configuration of the AP through an external registrar. The AP Setup mode
+ can be disabled by the user, by the remote management or in case of a 
+brute force attack against the AP's PIN (Wrong PIN provided to AP 
+multiple times).  Enumeration of:
+Unlocked
+  LockedByLocalManagement
+  LockedByRemoteManagement
+  PINRetryLimitReached
+
+This parameter corresponds directly to the "AP Setup Locked" attribute 
+of the WPS specification [WPSv1.0].  The 
+factory default setting is Unlocked.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.SetupLock
+----------------------------------------------------------------
+When set to true, the Access Point will 
+refuse to accept new external registrars; already established registrars
+ will continue to be able to add new enrollees (the SetupLockedState
+ becomes LockedByRemoteManagement).
+When set to false, the Access Point is enabled for configuration 
+through an external registrar (the SetupLockedState
+ becomes Unlocked).
+The factory default setting is false.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.ConfigurationState
+----------------------------------------------------------------
+Description of the WPS status on the Wireless 
+Access Point side.  Enumeration of:
+Not configured (WLAN interface is unconfigured: 
+out-of-the box configuration)
+  Configured
+ (WLAN interface is configured)
+
+This parameter corresponds directly to the "Wi-Fi Protected Setup State"
+ attribute of the WPS specification [WPSv1.0].
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.LastConfigurationError
+----------------------------------------------------------------
+Shows the result of the last external registrar 
+attempt to configure the Access Point.  Enumeration of:
+NoError
+  DecryptionCRCFailure
+  SignalTooWeak
+  CouldntConnectToRegistrar
+  RogueActivitySuspected
+  DeviceBusy
+  SetupLocked
+  MessageTimeout
+  RegistrationSessionTimeout
+  DevicePasswordAuthFailure
+
+If no external registrar has yet attempted to configure the Access 
+Point, this parameter MUST have the value NoError.  The value of 
+this parameter MUST persist across CPE reboots.
+This parameter corresponds directly to the "Configuration Error" 
+attribute of the WPS specification [WPSv1.0].
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.RegistrarNumberOfEntries
+----------------------------------------------------------------
+Number of entries in the Registrar table: number
+ of Registrars that currently have an association with the Access Point.
+This parameter corresponds directly to the "Registrar Current" attribute
+ of the WPS specification [WPSv1.0].
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.RegistrarEstablished
+----------------------------------------------------------------
+true if the Access Point has ever 
+previously created an association with a Registrar.
+This parameter corresponds directly to the "Registrar Established" 
+attribute of the WPS specification [WPSv1.0].  
+The factory default setting is false.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.Registrar.*.Enable
+----------------------------------------------------------------
+If true, the registrar can be used by the
+ Access Point for WPS procedures.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.Registrar.*.Alias
+----------------------------------------------------------------
+A non-volatile handle used to reference this 
+instance. Alias provides a mechanism for an ACS to label this instance 
+for future reference.
+If the CPE supports the Alias-based Addressing feature as defined in 
+[Section 3.6.1/TR-069a4] and described in 
+[Appendix II/TR-069a4], the following 
+mandatory constraints MUST be enforced:
+Its value MUST NOT be empty.
+  Its value MUST start with a letter.
+  If its instance object is created by the CPE, the initial 
+value MUST start with a "cpe-" prefix.
+  The CPE MUST NOT change the parameter value.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.Registrar.*.UUID
+----------------------------------------------------------------
+UUID of the registrar. This is represented as 
+specified in RFC 4122 [RFC4122] but omitting 
+the leading "urn:uuid:", e.g. f81d4fae-7dec-11d0-a765-00a0c91e6bf6.
+This parameter corresponds directly to the "UUID-R" attribute of the WPS
+ specification [WPSv1.0].  Possible patterns:
+[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WPS.Registrar.*.DeviceName
+----------------------------------------------------------------
+Device Name of the registrar.
+This parameter corresponds directly to the "Device Name" attribute of 
+the WPS specification [WPSv1.0].
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.AssociatedDevice.*.AssociatedDeviceMACAddress
+----------------------------------------------------------------
+[MACAddress] 
+  The MAC address of an associated device.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.AssociatedDevice.*.AssociatedDeviceIPAddress
+----------------------------------------------------------------
+The IP address or DNS name of an associated 
+device.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.AssociatedDevice.*.AssociatedDeviceAuthenticationState
+----------------------------------------------------------------
+Whether an associated device has authenticated (true)
+ or not (false).
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.AssociatedDevice.*.LastRequestedUnicastCipher
+----------------------------------------------------------------
+The unicast cipher that was most recently used 
+for a station with a specified MAC address (802.11i only).
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.AssociatedDevice.*.LastRequestedMulticastCipher
+----------------------------------------------------------------
+The multicast cipher that was most recently used
+ for a station with a specified MAC address (802.11i only).
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.AssociatedDevice.*.LastPMKId
+----------------------------------------------------------------
+The pairwise master key (PMK) that was most 
+recently used for a station with a specified MAC address (802.11i only).
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.AssociatedDevice.*.LastDataTransmitRate
+----------------------------------------------------------------
+The data transmit rate that was most recently 
+used for a station with a specified MAC address.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WEPKey.*.Alias
+----------------------------------------------------------------
+A non-volatile handle used to reference this 
+instance. Alias provides a mechanism for an ACS to label this instance 
+for future reference.
+If the CPE supports the Alias-based Addressing feature as defined in 
+[Section 3.6.1/TR-069a4] and described in 
+[Appendix II/TR-069a4], the following 
+mandatory constraints MUST be enforced:
+Its value MUST NOT be empty.
+  Its value MUST start with a letter.
+  If its instance object is created by the CPE, the initial 
+value MUST start with a "cpe-" prefix.
+  The CPE MUST NOT change the parameter value.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.WEPKey.*.WEPKey
+----------------------------------------------------------------
+A WEP key expressed as a hexadecimal string. 
+The WEP encryption level for a given key is inferred from the key 
+length, e.g. 10 characters for 40-bit encryption, or 26 characters for 
+104-bit encryption (keys do not all have to be of the same length, 
+although they will be if the CPE uses InternetGatewayDevice.LANDevice.{i}.WLANConfiguration.{i}.KeyPassphrase
+ to generate them).
+If InternetGatewayDevice.LANDevice.{i}.WLANConfiguration.{i}.KeyPassphrase
+ is written, all four WEP keys are immediately generated.  The ACS 
+SHOULD NOT set the passphrase and also set the WEP keys directly (the 
+result of doing this is undefined).
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.PreSharedKey.*.Alias
+----------------------------------------------------------------
+A non-volatile handle used to reference this 
+instance. Alias provides a mechanism for an ACS to label this instance 
+for future reference.
+If the CPE supports the Alias-based Addressing feature as defined in 
+[Section 3.6.1/TR-069a4] and described in 
+[Appendix II/TR-069a4], the following 
+mandatory constraints MUST be enforced:
+Its value MUST NOT be empty.
+  Its value MUST start with a letter.
+  If its instance object is created by the CPE, the initial 
+value MUST start with a "cpe-" prefix.
+  The CPE MUST NOT change the parameter value.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.PreSharedKey.*.PreSharedKey
+----------------------------------------------------------------
+A literal WPA PSK expressed as a hexadecimal 
+string.
+The first table entry contains the default PreSharedKey (InternetGatewayDevice.LANDevice.{i}.WLANConfiguration.{i}.PreSharedKey.1.PreSharedKey).
+If KeyPassphrase
+ is written, the PSK is immediately generated.  The ACS SHOULD NOT set 
+the passphrase and also set the PSK directly (the result of doing this 
+is undefined).
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.PreSharedKey.*.KeyPassphrase
+----------------------------------------------------------------
+A passphrase from which the PSK is to be 
+generated.
+The first table entry is the same as the parameter InternetGatewayDevice.LANDevice.{i}.WLANConfiguration.{i}.KeyPassphrase
+ for the same instance of WLANConfiguration.  When either parameter is 
+changed, the value of the other is changed as well.
+If KeyPassphrase is written, the PSK is immediately generated.  
+The ACS SHOULD NOT set the passphrase and also set the PSK directly (the
+ result of doing this is undefined).
+The key is generated as specified by WPA, which uses PBKDF2 from PKCS 
+#5: Password-based Cryptography Specification Version 2.0 (RFC 2898 [RFC2898]).
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.PreSharedKey.*.AssociatedDeviceMACAddress
+----------------------------------------------------------------
+[MACAddress] 
+  The MAC address associated with a preshared key, or an empty string if
+ no MAC address is associated with the key.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.APWMMParameter.*.Alias
+----------------------------------------------------------------
+A non-volatile handle used to reference this 
+instance. Alias provides a mechanism for an ACS to label this instance 
+for future reference.
+If the CPE supports the Alias-based Addressing feature as defined in 
+[Section 3.6.1/TR-069a4] and described in 
+[Appendix II/TR-069a4], the following 
+mandatory constraints MUST be enforced:
+Its value MUST NOT be empty.
+  Its value MUST start with a letter.
+  If its instance object is created by the CPE, the initial 
+value MUST start with a "cpe-" prefix.
+  The CPE MUST NOT change the parameter value.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.APWMMParameter.*.AIFSN
+----------------------------------------------------------------
+Arbitration Inter Frame Spacing (Number).  This 
+is the number of time slots in the arbitration interframe space.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.APWMMParameter.*.ECWMin
+----------------------------------------------------------------
+Exponent of Contention Window (Minimum). This 
+encodes the Values of CWMin as an exponent: CWMin = 2^ECWMin - 1.
+For example, if ECWMin is 8, then CWMin is 2^8 - 1, or 255,
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.APWMMParameter.*.ECWMax
+----------------------------------------------------------------
+Exponent of Contention Window (Maximum). This 
+encodes the Values of CWMax as an exponent: CWMax = 2^ECWMax - 1.
+For example, if ECWMax is 8, then CWMax is 2^8 - 1, or 255,
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.APWMMParameter.*.TXOP
+----------------------------------------------------------------
+Transmit Opportunity, in multiples of 32 
+microseconds.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.APWMMParameter.*.AckPolicy
+----------------------------------------------------------------
+Ack Policy, where false=Do Not 
+Acknowledge and true=Acknowledge.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.STAWMMParameter.*.Alias
+----------------------------------------------------------------
+A non-volatile handle used to reference this 
+instance. Alias provides a mechanism for an ACS to label this instance 
+for future reference.
+If the CPE supports the Alias-based Addressing feature as defined in 
+[Section 3.6.1/TR-069a4] and described in 
+[Appendix II/TR-069a4], the following 
+mandatory constraints MUST be enforced:
+Its value MUST NOT be empty.
+  Its value MUST start with a letter.
+  If its instance object is created by the CPE, the initial 
+value MUST start with a "cpe-" prefix.
+  The CPE MUST NOT change the parameter value.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.STAWMMParameter.*.AIFSN
+----------------------------------------------------------------
+Arbitration Inter Frame Spacing (Number).  This 
+is the number of time slots in the arbitration interframe space.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.STAWMMParameter.*.ECWMin
+----------------------------------------------------------------
+Exponent of Contention Window (Minimum). This 
+encodes the Values of CWMin as an exponent: CWMin = 2^ECWMin - 1.
+For example, if ECWMin is 8, then CWMin is 2^8 - 1, or 255,
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.STAWMMParameter.*.ECWMax
+----------------------------------------------------------------
+Exponent of Contention Window (Maximum). This 
+encodes the Values of CWMax as an exponent: CWMax = 2^ECWMax - 1.
+For example, if ECWMax is 8, then CWMax is 2^8 - 1, or 255,
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.STAWMMParameter.*.TXOP
+----------------------------------------------------------------
+Transmit Opportunity, in multiples of 32 
+microseconds.
+
+InternetGatewayDevice.LANDevice.*.WLANConfiguration.*.STAWMMParameter.*.AckPolicy
+----------------------------------------------------------------
+Ack Policy, where false=Do Not 
+Acknowledge and true=Acknowledge.
+

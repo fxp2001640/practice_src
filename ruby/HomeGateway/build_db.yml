@@ -1,0 +1,17 @@
+--- 
+- !ruby/object:Build
+  name: QSDK_Retail
+  cmd_path: /home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches/qsdk_2.0/qsdk
+  cmd: make V=s
+  sync_path: /home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches/qsdk_2.0/qsdk
+  versionControl: Git
+  logDir: /home/xpfan/test/tmp/QSDK_Retail_Daily_Build
+  images: /home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches/qsdk_2.0/qsdk/bin/ipq806x/openwrt-ipq806x-ubi-root.img
+- !ruby/object:Build
+  name: QSDK_Carrier
+  cmd_path: /home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches/qsdk_carrier/qsdk
+  cmd: make V=s
+  sync_path: /home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches/qsdk_carrier/qsdk
+  versionControl: Git
+  logDir: /home/xpfan/test/tmp/QSDK_Carrier_Daily_Build
+  images: /home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches/qsdk_carrier/qsdk/bin/ipq806x/openwrt-ipq806x-ubi-root.img

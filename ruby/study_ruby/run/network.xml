@@ -1,0 +1,209 @@
+<Device>
+    <InterfaceStack>
+        <prototype>
+            <HigherLayer dataType="Text" />
+            <LowerLayer dataType="Text" />
+            <HigherAlias dataType="Text" />
+            <LowerAlias dataType="Text" />
+        </prototype>
+    </InterfaceStack>
+    <Ethernet>
+        <InterfaceNumberOfEntries dataType="UInt32" />
+        <LinkNumberOfEntries dataType="UInt32" />
+        <VLANTerminationNumberOfEntries dataType="UInt32" />
+        <Interface>
+            <prototype>
+                <Enable dataType="Bool" />
+                <Status dataType="Text" />
+                <Alias dataType="Text" />
+                <Name dataType="Text" />
+                <LastChange dataType="UInt32" />
+                <LowerLayers dataType="Text" />
+                <Upstream dataType="Bool" />
+                <MACAddress dataType="Text" />
+                <MaxBitRate dataType="Int32" />
+                <DuplexMode dataType="Text" />
+                <Stats>
+                    <BytesSent dataType="UInt32" />
+                    <BytesReceived dataType="UInt32" />
+                    <PacketsSent dataType="UInt32" />
+                    <PacketsReceived dataType="UInt32" />
+                    <ErrorsSent dataType="UInt32" />
+                    <ErrorsReceived dataType="UInt32" />
+                    <UnicastPacketsSent dataType="UInt32" />
+                    <UnicastPacketsReceived dataType="UInt32" />
+                    <DiscardPacketsSent dataType="UInt32" />
+                    <DiscardPacketsReceived dataType="UInt32" />
+                    <MulticastPacketsSent dataType="UInt32" />
+                    <MulticastPacketsReceived dataType="UInt32" />
+                    <BroadcastPacketsSent dataType="UInt32" />
+                    <BroadcastPacketsReceived dataType="UInt32" />
+                    <UnknownProtoPacketsReceived dataType="UInt32" />
+                </Stats>
+            </prototype>
+        </Interface>
+        <Link>
+            <prototype>
+                <Enable dataType="Bool" />
+                <Status dataType="Text" />
+                <Alias dataType="Text" />
+                <Name dataType="Text" />
+                <LastChange dataType="UInt32" />
+                <LowerLayers dataType="Text" />
+                <MACAddress dataType="Text" />
+                <PriorityTagging dataType="Bool" />
+                <Stats>
+                    <BytesSent dataType="UInt32" />
+                    <BytesReceived dataType="UInt32" />
+                    <PacketsSent dataType="UInt32" />
+                    <PacketsReceived dataType="UInt32" />
+                    <ErrorsSent dataType="UInt32" />
+                    <ErrorsReceived dataType="UInt32" />
+                    <UnicastPacketsSent dataType="UInt32" />
+                    <UnicastPacketsReceived dataType="UInt32" />
+                    <DiscardPacketsSent dataType="UInt32" />
+                    <DiscardPacketsReceived dataType="UInt32" />
+                    <MulticastPacketsSent dataType="UInt32" />
+                    <MulticastPacketsReceived dataType="UInt32" />
+                    <BroadcastPacketsSent dataType="UInt32" />
+                    <BroadcastPacketsReceived dataType="UInt32" />
+                    <UnknownProtoPacketsReceived dataType="UInt32" />
+                </Stats>
+            </prototype>
+        </Link>
+        <VLANTermination>
+            <prototype>
+                <Enable dataType="Bool" />
+                <Status dataType="Text" />
+                <Alias dataType="Text" />
+                <Name dataType="Text" />
+                <LastChange dataType="UInt32" />
+                <LowerLayers dataType="Text" />
+                <VLANID dataType="UInt32" />
+                <Stats>
+                    <BytesSent dataType="UInt32" />
+                    <BytesReceived dataType="UInt32" />
+                    <PacketsSent dataType="UInt32" />
+                    <PacketsReceived dataType="UInt32" />
+                    <ErrorsSent dataType="UInt32" />
+                    <ErrorsReceived dataType="UInt32" />
+                    <UnicastPacketsSent dataType="UInt32" />
+                    <UnicastPacketsReceived dataType="UInt32" />
+                    <DiscardPacketsSent dataType="UInt32" />
+                    <DiscardPacketsReceived dataType="UInt32" />
+                    <MulticastPacketsSent dataType="UInt32" />
+                    <MulticastPacketsReceived dataType="UInt32" />
+                    <BroadcastPacketsSent dataType="UInt32" />
+                    <BroadcastPacketsReceived dataType="UInt32" />
+                    <UnknownProtoPacketsReceived dataType="UInt32" />
+                </Stats>
+            </prototype>
+        </VLANTermination>
+    </Ethernet>
+    <Bridging>
+        <MaxBridgeEntries dataType="UInt32" />
+        <MaxDBridgeEntries dataType="UInt32" />
+        <MaxQBridgeEntries dataType="UInt32" />
+        <MaxVLANEntries dataType="UInt32" />
+        <MaxFilterEntries dataType="UInt32" />
+        <BridgeNumberOfEntries dataType="UInt32" />
+        <FilterNumberOfEntries dataType="UInt32" />
+        <Bridge>
+            <prototype>
+                <Enable dataType="Bool" />
+                <Status dataType="Text" />
+                <Alias dataType="Text" />
+                <Standard dataType="Text" />
+                <PortNumberOfEntries dataType="UInt32" />
+                <VLANNumberOfEntries dataType="UInt32" />
+                <VLANPortNumberOfEntries dataType="UInt32" />
+                <Port>
+                    <prototype>
+                        <Enable dataType="Bool" />
+                        <Status dataType="Text" />
+                        <Alias dataType="Text" />
+                        <Name dataType="Text" />
+                        <LastChange dataType="UInt32" />
+                        <LowerLayers dataType="Text" />
+                        <ManagementPort dataType="Bool" />
+                        <DefaultUserPriority dataType="UInt32" />
+                        <PriorityRegeneration dataType="Text" />
+                        <PortState dataType="Text" />
+                        <PVID dataType="Int32" />
+                        <AcceptableFrameTypes dataType="Text" />
+                        <IngressFiltering dataType="Bool" />
+                        <PriorityTagging dataType="Bool" />
+                        <Stats>
+                            <BytesSent dataType="UInt32" />
+                            <BytesReceived dataType="UInt32" />
+                            <PacketsSent dataType="UInt32" />
+                            <PacketsReceived dataType="UInt32" />
+                            <ErrorsSent dataType="UInt32" />
+                            <ErrorsReceived dataType="UInt32" />
+                            <UnicastPacketsSent dataType="UInt32" />
+                            <UnicastPacketsReceived dataType="UInt32" />
+                            <DiscardPacketsSent dataType="UInt32" />
+                            <DiscardPacketsReceived dataType="UInt32" />
+                            <MulticastPacketsSent dataType="UInt32" />
+                            <MulticastPacketsReceived dataType="UInt32" />
+                            <BroadcastPacketsSent dataType="UInt32" />
+                            <BroadcastPacketsReceived dataType="UInt32" />
+                            <UnknownProtoPacketsReceived dataType="UInt32" />
+                        </Stats>
+                    </prototype>
+                </Port>
+                <VLAN>
+                    <prototype>
+                        <Enable dataType="Bool" />
+                        <Alias dataType="Text" />
+                        <Name dataType="Text" />
+                        <VLANID dataType="Int32" />
+                    </prototype>
+                </VLAN>
+                <VLANPort>
+                    <prototype>
+                        <Enable dataType="Bool" />
+                        <Alias dataType="Text" />
+                        <VLAN dataType="Text" />
+                        <Port dataType="Text" />
+                        <Untagged dataType="Bool" />
+                    </prototype>
+                </VLANPort>
+            </prototype>
+        </Bridge>
+        <Filter>
+            <prototype>
+                <Enable dataType="Bool" />
+                <Alias dataType="Text" />
+                <Status dataType="Text" />
+                <Bridge dataType="Text" />
+                <Order dataType="UInt32" />
+                <Interface dataType="Text" />
+                <DHCPType dataType="Text" />
+                <VLANIDFilter dataType="UInt32" />
+                <EthertypeFilterList dataType="Text" />
+                <EthertypeFilterExclude dataType="Bool" />
+                <SourceMACAddressFilterList dataType="Text" />
+                <SourceMACAddressFilterExclude dataType="Bool" />
+                <DestMACAddressFilterList dataType="Text" />
+                <DestMACAddressFilterExclude dataType="Bool" />
+                <SourceMACFromVendorClassIDFilter dataType="Text" />
+                <SourceMACFromVendorClassIDFilterv6 dataType="Text" />
+                <SourceMACFromVendorClassIDFilterExclude dataType="Bool" />
+                <SourceMACFromVendorClassIDMode dataType="Text" />
+                <DestMACFromVendorClassIDFilter dataType="Text" />
+                <DestMACFromVendorClassIDFilterv6 dataType="Text" />
+                <DestMACFromVendorClassIDFilterExclude dataType="Bool" />
+                <DestMACFromVendorClassIDMode dataType="Text" />
+                <SourceMACFromClientIDFilter dataType="Text" />
+                <SourceMACFromClientIDFilterExclude dataType="Bool" />
+                <DestMACFromClientIDFilter dataType="Text" />
+                <DestMACFromClientIDFilterExclude dataType="Bool" />
+                <SourceMACFromUserClassIDFilter dataType="Text" />
+                <SourceMACFromUserClassIDFilterExclude dataType="Bool" />
+                <DestMACFromUserClassIDFilter dataType="Text" />
+                <DestMACFromUserClassIDFilterExclude dataType="Bool" />
+            </prototype>
+        </Filter>
+    </Bridging>
+</Device>
