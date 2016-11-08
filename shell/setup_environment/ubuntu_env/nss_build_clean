@@ -1,0 +1,20 @@
+#! /bin/bash
+
+NSS_BUILD_DIR=$PWD
+
+nss_build_clean()
+{
+	local projects="retail_router0 retail_router1"
+
+	for prj in $projects 
+	do
+		rm -rf $NSS_BUILD_DIR/nss_proc/projects/$prj/build
+		rm -rf $NSS_BUILD_DIR/nss_proc/projects/$prj/config/config.*
+		rm -rf $NSS_BUILD_DIR/nss_proc/projects/$prj/.config*
+		rm -rf $NSS_BUILD_DIR/nss_proc/projects/$prj/ultra.elf
+	done
+
+	rm -rf $NSS_BUILD_DIR/nss_proc/bin
+}
+
+nss_build_clean

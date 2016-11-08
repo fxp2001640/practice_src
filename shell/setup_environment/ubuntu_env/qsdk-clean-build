@@ -1,0 +1,24 @@
+#! /bin/bash
+
+do_rebase(){
+	git rebase m/banana upload
+	cd qca/feeds/packages/ && git rebase m/banana upload && cd ../../..
+	cd qca/src/linux/ && git rebase m/banana upload && cd ../../..
+}
+
+repo_sync(){
+	repo sync
+}
+
+build(){
+	make package/symlinks
+	cp qca/configs/qsdk/ipq806x_retail.config .config
+	make defconfig
+	#meke menuconfig
+	make
+}
+
+do_rebase
+repo_sync
+build
+

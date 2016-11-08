@@ -102,4 +102,4 @@ install_kernel_code :
 	@$(CUR_DIR)/mk.sh $@
 
 create_qsdk_tarball :
-	tar -czf /home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches/qsdk-latest.tar.gz -T $(CUR_DIR)/ubuntu_env/qsdk.include -X $(CUR_DIR)/ubuntu_env/qsdk.exclude
+	@$(CUR_DIR)/mk.sh $@

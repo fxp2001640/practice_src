@@ -1,0 +1,4 @@
+#!/bin/sh
+
+export P4PORT=
+p4d -r /home/xpfan/source_code/my_perforce_server &

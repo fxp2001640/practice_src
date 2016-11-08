@@ -1,0 +1,165 @@
+db12x-hgw :
+tftp 0x80060000 db12x-hgw-squashfs&&nand erase 0x3a0000 0xf00000&&nand write $fileaddr 0x3a0000 $filesize
+
+tftp 0x80060000 vmlinux.lzma.uImage&&nand erase 0xa0000 0x300000&&nand write $fileaddr 0xa0000 $filesize
+
+set bootargs "console=ttyS0,115200 root=/dev/mtdblock3 rootfstype=squashfs init=/sbin/init mtdparts=ath-nand:512k(u-boot),128k(u-boot-env),3m(uImage),15m(rootfs),128k(dummy),128k(caldata)"
+
+set bootargs "console=ttyS0,115200 root=/dev/mtdblock3 rootfstype=jffs2 init=/sbin/init mtdparts=ath-nand:512k(u-boot),128k(u-boot-env),3m(uImage),15m(rootfs),128k(mib0),128k(caldata)"
+
+export TARGETFSSIZE=4194304
+export ATH_CAL_NAND_FLASH=1
+export ATH_CAL_NAND_PARTITION="caldata"
+
+
+
+
+tftp 0x80060000 db12x-hgw-nand-jffs2&&nand erase 0x3a0000 0xf00000&&nand write $fileaddr 0x3a0000 $filesize
+
+tftp 0x80060000 vmlinux.lzma.uImage&&nand erase 0xa0000 0x300000&&nand write $fileaddr 0xa0000 $filesize
+
+
+
+tftp 0x80060000 2fw.bin;nferase 0x0 0x40000;nfcp 0x80060000 0x0 0x40000
+
+
+
+set updub "loadaddr=${UBOOTADDR} && filename=nand-u-boot.bin && run update"
+
+
+set lu "tftp 0x80060000 ${dir}nand-u-boot.bin&&erase 0x9f000000 +$filesize;cp.b $fileaddr 0x9f000000 $filesize"
+
+
+ap99-hgw :
+make BOARD_TYPE=ap99-hgw
+
+u-boot:
+tftp 0x80060000 u-boot.bin
+erase 0xbf000000 +0x40000; cp.b $fileaddr 0xbf000000 $filesize
+
+root file system(4096KB): 
+tftp 0x80060000 ap99-ivi-squashfs
+tftp 0x80060000 ap99-hgw-squashfs
+erase 0xbf080000 +0x400000; cp.b $fileaddr 0xbf080000 $filesize
+
+kernel image(1280KB): 
+tftp 0x80060000 vmlinux.lzma.uImage
+erase 0xbf580000 +0x200000; cp.b $fileaddr 0xbf580000 $filesize
+
+Erase mib0 and mib1(256KB and 256KB): 
+erase 0xbfb00000 +0x40000
+erase 0xbfb40000 +0x40000
+
+
+ setenv bootargs console=ttyS0,115200 root=31:02 rootfstype=squashfs init=/sbin/init mtdparts=ar7240-nor0:256k(u-boot),256k(uboot-env),5120k(rootfs),2048k(uImage),2048k(spare-rootfs),1024k(spare-uImage),256k(mib0),256k(mib1),4096k(ct),256k(ART)
+
+
+
+
+tftp 0x80060000 xpfan/db12x_routing_s17-jffs2&&erase 0x9f050000 +0x630000;cp.b $fileaddr 0x9f050000 $filesize
+
+tftp 0x80060000 xpfan/vmlinux_routing_s17.lzma.uImage&&erase 0x9f680000 +$filesize;cp.b $fileaddr 0x9f680000 $filesize
+
+tftp 0x80060000 xpfan/db12x_s17-jffs2&&erase 0x9f050000 +0x630000;cp.b $fileaddr 0x9f050000 $filesize
+
+tftp 0x80060000 xpfan/vmlinux_s17.lzma.uImage&&erase 0x9f680000 +$filesize;cp.b $fileaddr 0x9f680000 $filesize
+
+
+tftp 0x80060000 xpfan/db12x_routing-jffs2&&erase 0x9f050000 +0x630000;cp.b $fileaddr 0x9f050000 $filesize
+
+tftp 0x80060000 xpfan/vmlinux_routing.lzma.uImage&&erase 0x9f680000 +$filesize;cp.b $fileaddr 0x9f680000 $filesize
+
+tftp 0x80060000 xpfan/db12x-hgw_s27-squashfs&&erase 0x9f050000 +0x630000;cp.b $fileaddr 0x9f050000 $filesize
+
+tftp 0x80060000 xpfan/vmlinux_s27.lzma.uImage&&erase 0x9f680000 +$filesize;cp.b $fileaddr 0x9f680000 $filesize
+
+set bootargs "console=ttyS0,115200 root=31:02 rootfstype=squashfs init=/sbin/init mtdparts=ath-nor0:256k(u-boot),64k(uboot-env),6336k(rootfs),1408k(uImage),64k(mib0),64k(ART)"
+
+make BOARD_TYPE=db12x-hgw ETH_CONFIG=_s27 BUILD_TYPE=squashfs BUILD_CONFIG=_hwaccel GWLANG=ch
+
+tftp 0x80060000 db12x-hgw_hwaccel_s27-squashfs&&erase 0x9f050000 +0x630000;cp.b $fileaddr 0x9f050000 $filesize
+
+tftp 0x80060000 vmlinux_hwaccel_s27.lzma.uImage&&erase 0x9f680000 +$filesize;cp.b $fileaddr 0x9f680000 $filesize
+
+telecomadmin
+nE7jA%5m
+
+tftp 0x80060000 xpfan/nfastnat-db12x-jffs2&&erase 0x9f050000 +0x630000;cp.b $fileaddr 0x9f050000 $filesize
+
+tftp 0x80060000 xpfan/nfastnat-vmlinux.lzma.uImage&&erase 0x9f680000 +$filesize;cp.b $fileaddr 0x9f680000 $filesize
+
+set bootargs "console=ttyS0,115200 root=31:02 rootfstype=jffs2 init=/sbin/init mtdparts=ath-nor0:256k(u-boot),64k(uboot-env),6336k(rootfs),1408k(uImage),64k(mib0),64k(ART)"
+
+
+tftp 0x80060000 db12x-hgw_fastnat_s27-squashfs&&erase 0x9f050000 +0x630000;cp.b $fileaddr 0x9f050000 $filesize
+
+tftp 0x80060000 vmlinux_fastnat_s27.lzma.uImage&&erase 0x9f680000 +$filesize;cp.b $fileaddr 0x9f680000 $filesize
+
+
+tftp 0x80060000 db12x-hgw_mixnat_s27-squashfs&&erase 0x9f050000 +0x630000;cp.b $fileaddr 0x9f050000 $filesize
+
+tftp 0x80060000 vmlinux_mixnat_s27.lzma.uImage&&erase 0x9f680000 +$filesize;cp.b $fileaddr 0x9f680000 $filesize
+
+
+tftp 0x80060000 ap123-router-squashfs&&erase 0x9f050000 +0x630000;cp.b $fileaddr 0x9f050000 $filesize
+
+tftp 0x80060000 vmlinux-router.lzma.uImage&&erase 0x9f680000 +$filesize;cp.b $fileaddr 0x9f680000 $filesize
+
+tftp 0x80060000 ap123-router-squashfs&&erase 0x9f010000 +$filesize;cp.b $fileaddr 0x9f010000 $filesize
+tftp 0x80060000 vmlinux-router.lzma.uImage&&erase 0x9f300000 +$filesize;cp.b $fileaddr 0x9f300000 $filesize
+
+
+tftp 0x80060000 ap123-router_hwaccel-squashfs&&erase 0x9f010000 +$filesize;cp.b $fileaddr 0x9f010000 $filesize
+tftp 0x80060000 vmlinux-router_hwaccel.lzma.uImage&&erase 0x9f300000 +$filesize;cp.b $fileaddr 0x9f300000 $filesize
+
+brctl addif br0 eth1
+brctl delif br0 eth1.1
+echo 2 > /proc/sys/xp-debug/XDBG_FASTNAT_STEP_DBG
+echo 2 > /proc/sys/xp-debug/XDBG_FASTNAT_ADD_ENTRY
+echo 3 > /proc/sys/xp-debug/XDBG_FASTNAT_PKT
+
+make BOARD_TYPE=db12x-hgw ETH_CONFIG=_s27 BUILD_TYPE=squashfs BUILD_CONFIG=_fastnat GWLANG=ch
+
+brctl delif br0 eth0
+ifconfig eth0 192.168.200.1
+echo 1 > /proc/sys/net/ipv4/ip_forward
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+
+
+-----------------------------------------------
+
+bootargs=console=ttyS0,115200 root=31:03 rootfstype=jffs2 init=/sbin/init mtdparts=ath-nand:512k(u-boot),128k(u-boot-env),3m(uImage),15m(rootfs),128k(mib0),)
+bootcmd=nboot 0x81000000 0 0xa0000
+bootdelay=4
+baudrate=115200
+ethaddr=0x00:0xaa:0xbb:0xcc:0xdd:0xee
+ipaddr=192.168.1.1
+serverip=192.168.1.10
+dir=
+lu=tftp 0x80060000 ${dir}2fw.bin&&nand erase 0x0 0x40000&&nand write $fileaddr 0x0 $filesize
+lf=tftp 0x80060000 ${dir}db12x-hgw-nand-jffs2&&nand erase 0x3a0000 0xf00000&&nand write $fileaddr 0x3a0000 $filesize
+lk=tftp 0x80060000 ${dir}vmlinux${bc}.lzma.uImage&&nand erase 0xa0000 0x140000&&nand write $fileaddr 0xa0000 $filesize
+stdin=serial
+stdout=serial
+stderr=serial
+ethact=eth0
+
+-------------------------------------------------
+bootargs=console=ttyS0,115200 root=31:03 rootfstype=jffs2 init=/sbin/init mtdparts=ath-nand:512k(u-boot),128k(u-boot-env),3m(uImage),15m(rootfs),128k(mib0),)
+bootcmd=nboot 0x81000000 0 0xa0000
+bootdelay=4
+baudrate=115200
+ethaddr=0x00:0xaa:0xbb:0xcc:0xdd:0xee
+dir=
+lu=tftp 0x80060000 ${dir}2fw.bin&&nand erase 0x0 0x40000&&nand write $fileaddr 0x0 $filesize
+lf=tftp 0x80060000 ${dir}db12x-hgw-nand-jffs2&&nand erase 0x3a0000 0xf00000&&nand write $fileaddr 0x3a0000 $filesize
+lk=tftp 0x80060000 ${dir}vmlinux${bc}.lzma.uImage&&nand erase 0xa0000 0x140000&&nand write $fileaddr 0xa0000 $filesize
+stdin=serial
+stdout=serial
+stderr=serial
+ethact=eth1
+filesize=a00000
+fileaddr=80060000
+ipaddr=192.168.1.1
+serverip=192.168.1.10
+

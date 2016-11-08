@@ -1,0 +1,9 @@
+#!/bin/bash
+
+idx=$1
+
+declare -a local_address=('0.0.0.0' '192.168.10.1' '192.168.20.1')
+
+XP_PPP_PATH=/home/xpfan/test/setup_environment/ubuntu_env/ppp/pppoe-server
+
+pppoe-server -I eth0 -C qca -S qca -L ${local_address[$idx]} -O $XP_PPP_PATH/pppoe-server-options -p $XP_PPP_PATH/ipaddress-pool-$idx

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-QSDK_DIR='/home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches/qsdk_2.0'
+QSDK_DIR='/home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches/dandelion'
 CUR_DIR=$PWD
 RUBY_VER=2.2.2
 RUBYGEMS_VER=2.4.7
@@ -21,8 +21,8 @@ install_git_repo_p4(){
 	mkdir -p /home/xpfan/bin
 
 	installed "repo" || {
-		curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > /home/xpfan/bin/repo
-		chmod a+x /home/xpfan/bin/repo
+		cd /home/xpfan/bin && git clone https://gerrit.googlesource.com/git-repo
+		echo 'PATH="$HOME/bin/depot_tools:$PATH"' >> /home/xpfan/.profile
 		install "repo"
 	}
 
@@ -107,11 +107,11 @@ install_qsdk_2_0(){
 
 	mkdir -p $QSDK_DIR
 	cd $QSDK_DIR
-	repo init --config-name -u ssh://qca-git01.qualcomm.com:29418/releases/manifest/qstak.git -b banana
+	repo init --config-name -u ssh://qca-git01.qualcomm.com:29418/releases/manifest/qstak.git -b $(basename $QSDK_DIR)
 	repo sync
 	cd qsdk
+	cp qca/configs/qsdk/ipq806x_premium.config .config
 	make package/symlinks
-	cp qca/configs/qsdk/ipq806x_retail.config .config
 	make defconfig
 	make menuconfig
 	make
@@ -136,8 +136,11 @@ link_platform_compile_tools(){
 }
 
 link_compile_tools(){
-	link_platform_compile_tools "arm" "$QSDK_DIR/qsdk/staging_dir/toolchain-arm_v7-a_gcc-4.6-linaro_uClibc-0.9.33.2_eabi/bin/arm-openwrt-linux-uclibcgnueabi"
-	link_platform_compile_tools "mips" "$QSDK_DIR/qsdk/staging_dir/toolchain-mips_r2_gcc-4.6-linaro_uClibc-0.9.33.2/bin/mips-openwrt-linux-uclibc"
+	local arm_dir=$(ls $QSDK_DIR/qsdk/staging_dir |grep toolchain-arm)
+	local mips_dir=$(ls $QSDK_DIR/qsdk/staging_dir |grep toolchain-mips)
+
+	link_platform_compile_tools "arm" "$QSDK_DIR/qsdk/staging_dir/$arm_dir/bin/arm-openwrt-linux-uclibcgnueabi"
+	link_platform_compile_tools "mips" "$QSDK_DIR/qsdk/staging_dir/$mips_dir/bin/mips-openwrt-linux-uclibc"
 }
 
 install_l2tp_server(){
@@ -174,6 +177,10 @@ install_appjs(){
 	sudo apt-get install npm
 	sudo ln -s /usr/bin/nodejs /usr/bin/node
 	sudo npm install appjs
+}
+
+create_qsdk_tarball(){
+	cd $QSDK_DIR && tar -czf ../qsdk-latest.tar.gz -T $CUR_DIR/ubuntu_env/qsdk.include -X $CUR_DIR/ubuntu_env/qsdk.exclude
 }
 
 $1

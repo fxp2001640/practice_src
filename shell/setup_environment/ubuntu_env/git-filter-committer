@@ -1,0 +1,57 @@
+#! /bin/bash
+
+current_dir=`pwd`
+project_file="$current_dir/.repo/manifest.xml"
+
+get_project_dirs()
+{
+	local dirs=`grep path $project_file |cut -d '=' -f 2 -`
+	#remove "
+	dirs=${dirs//\"/}
+	echo $dirs
+}
+
+each_project_dir()
+{
+	local projects=$1
+	local func=$2
+
+	#skip first two parameters
+	shift
+	shift
+
+	for dir in $projects
+	do
+		$func $dir "$@"
+	done
+}
+
+filter_committer()
+{
+	local dir=$1
+	local committer_arg=$2
+	local committer_list=""
+
+	if [ -n "$committer_arg" ]; then
+		committer_list=("$committer_arg")
+	else
+		committer_list=("Xiaoping Fan" "Ken Zhu" "Zhi Chen")
+	fi
+	cnt=${#committer_list[@]}
+
+	echo "----------------"
+	echo $current_dir/$dir
+	cd $current_dir/$dir
+	for ((idx=0;idx<$cnt;idx++)); do
+		git log --committer="${committer_list[${idx}]}" --format=short
+	done
+}
+
+
+
+if [ -e "$project_file" ] ; then
+	dirs=$(get_project_dirs)
+	each_project_dir "$dirs" filter_committer "$@"
+else
+	echo "There is no .repo directory in current directory"
+fi

@@ -1,6 +1,5 @@
-/home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches/qsdk_2.0/qsdk/bin
-/home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches/qsdk_2.0/qsdk/build_dir/linux-ipq806x
-/home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches/qsdk_2.0/qsdk/build_dir/target-arm_v7-a_uClibc-0.9.33.2_eabi
-/home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches/qsdk_2.0/qsdk/dl
-/home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches/qsdk_2.0/qsdk/staging_dir/target-arm_v7-a_uClibc-0.9.33.2_eabi
-/home/xpfan/source_code/p4_src/xpfan_p4_src/depot/sw/branches/qsdk_2.0/qsdk/tmp
+qsdk/bin
+qsdk/build_dir
+qsdk/dl
+qsdk/staging_dir
+qsdk/tmp

@@ -1,9 +1,28 @@
 [user]
 	name = Xiaoping Fan
-	email = xfan@qca.qualcomm.com
-[review "review-android.quicinc.com"]
-	username = xfan
+	email = xfan@codeaurora.org
+
+[http]
+	cookiefile = /home/xpfan/.gitcookies
+
 [url "ssh://xfan@qca-git01.qualcomm.com:29418/"]
 	insteadOf = ssh://qca-git01.qualcomm.com:29418/
+
+[url "https://chromium.googlesource.com/a/"]
+	insteadOf = https://chromium.googlesource.com/
+	insteadOf = https://chromium.googlesource.com/a/
+
+[url "https://chrome-internal.googlesource.com/a/"]
+	insteadOf = https://chrome-internal.googlesource.com/
+	insteadOf = https://chrome-internal.googlesource.com/a/
+
 [color]
 	ui = auto
+
+[sendemail]
+	from = xfan@codeaurora.org
+	smtpserver = smtp.gmail.com
+	smtpserverport = 465
+	smtpencryption = tls
+	smtpuser = fxp2001640163@gmail.com
+

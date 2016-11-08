@@ -1,0 +1,16 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+[remote "cros"]
+	url = https://chromium.googlesource.com/chromiumos/third_party/kernel
+	review = https://chromium-review.googlesource.com
+	projectname = chromiumos/third_party/kernel
+	fetch = +refs/heads/*:refs/remotes/cros/*
+[gc]
+	pruneExpire = never
+[remote "qcagit"]
+	url = ssh://qca-git01.qualcomm.com:29418/chromeos/external/chromiumos/third_party/kernel
+	fetch = +refs/heads/*:refs/remotes/qcagit/*
+[branch "qca-gale"]
+	remote = qcagit
+	merge = refs/heads/qca-gale
