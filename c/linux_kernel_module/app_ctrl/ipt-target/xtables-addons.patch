@@ -1,0 +1,213 @@
+diff --git a/package/network/utils/xtables-addons/Makefile b/package/network/utils/xtables-addons/Makefile
+index d8f78bc..ad91f59 100644
+--- a/package/network/utils/xtables-addons/Makefile
++++ b/package/network/utils/xtables-addons/Makefile
+@@ -148,5 +148,6 @@ $(eval $(call BuildTemplate,psd,psd,xt_psd,xt_psd,))
+ $(eval $(call BuildTemplate,quota2,quota2,xt_quota2,xt_quota2,))
+ $(eval $(call BuildTemplate,sysrq,SYSRQ,xt_SYSRQ,xt_SYSRQ,+kmod-ipt-compat-xtables))
+ $(eval $(call BuildTemplate,tarpit,TARPIT,xt_TARPIT,xt_TARPIT,+kmod-ipt-compat-xtables +IPV6:kmod-ipv6))
++$(eval $(call BuildTemplate,example,Example,xt_EXAMPLE,))
+ 
+ $(eval $(call BuildPackage,iptaccount))
+diff --git a/package/network/utils/xtables-addons/patches/303-add-example-target.patch b/package/network/utils/xtables-addons/patches/303-add-example-target.patch
+new file mode 100644
+index 0000000..27b17cb
+--- /dev/null
++++ b/package/network/utils/xtables-addons/patches/303-add-example-target.patch
+@@ -0,0 +1,303 @@
++diff --git a/extensions/Mbuild b/extensions/Mbuild
++index 435032e..e2d5fbb 100644
++--- a/extensions/Mbuild
+++++ b/extensions/Mbuild
++@@ -23,3 +23,4 @@ obj-${build_psd}         += libxt_psd.so
++ obj-${build_quota2}      += libxt_quota2.so
++ obj-${build_gradm}       += libxt_gradm.so
++ obj-${build_LUA}         += LUA/
+++obj-${build_example}  += libxt_EXAMPLE.so
++diff --git a/extensions/libxt_EXAMPLE.c b/extensions/libxt_EXAMPLE.c
++new file mode 100644
++index 0000000..f631759
++--- /dev/null
+++++ b/extensions/libxt_EXAMPLE.c
++@@ -0,0 +1,224 @@
+++/* Shared library add-on to iptables for EXAMPLE
+++ *
+++ * (C) 2016 Xiaoping Fan <xfan@codeaurora.org>
+++ *
+++ * This program is distributed under the terms of GNU GPL v2, 2016
+++ *
+++ */
+++#include <stdio.h>
+++#include <string.h>
+++#include <xtables.h>
+++#include <linux/netfilter/xt_EXAMPLE.h>
+++
+++enum {
+++	O_SET_YES = 0,
+++	O_SET_NO,
+++	O_SET_THRESHOLD,
+++
+++	F_SET_YES = 1 << O_SET_YES,
+++	F_SET_NO = 1 << O_SET_NO,
+++	F_SET_THRESHOLD = 1 << O_SET_THRESHOLD,
+++
+++	F_OP_ANY       = F_SET_YES | F_SET_NO | F_SET_THRESHOLD,
+++};
+++
+++static void EXAMPLE_help(void)
+++{
+++	printf(
+++"EXAMPLE target options\n"
+++"  --immediate			Process matched flow immediately\n"
+++"  --never			Never process matched flow\n"
+++"  --after_n n		Process matched flow after numbers of packets\n"
+++"\n"
+++"				These options are mutually exclusive !\n"
+++);
+++}
+++
+++static const struct xt_option_entry EXAMPLE_opts[] = {
+++	{.name = "immediate", .id = O_SET_YES, .excl = F_OP_ANY,
+++	 .type = XTTYPE_NONE},
+++	{.name = "never", .id = O_SET_NO, .excl = F_OP_ANY,
+++	 .type = XTTYPE_NONE},
+++	{.name = "after_n", .id = O_SET_THRESHOLD,
+++	 .excl = F_OP_ANY, .type = XTTYPE_UINT32},
+++
+++	XTOPT_TABLEEND,
+++};
+++
+++static void EXAMPLE_parse(struct xt_option_call *cb)
+++{
+++	struct xt_EXAMPLE_info *ainfo = cb->data;
+++
+++	xtables_option_parse(cb);
+++	switch (cb->entry->id) {
+++	case O_SET_YES:
+++		ainfo->mode = XT_EXAMPLE_MODE_YES;
+++		break;
+++	case O_SET_NO:
+++		ainfo->mode = XT_EXAMPLE_MODE_NO;
+++		break;
+++	case O_SET_THRESHOLD:
+++		ainfo->mode = XT_EXAMPLE_MODE_THRESHOLD;
+++		ainfo->u.threshold = cb->val.u32;
+++		break;
+++	}
+++}
+++
+++static void EXAMPLE_check(struct xt_fcheck_call *cb)
+++{
+++	if (cb->xflags == 0)
+++		xtables_error(PARAMETER_PROBLEM,
+++		           "EXAMPLE target: one parameter is required");
+++}
+++
+++static void EXAMPLE_print(const void *ip, const struct xt_entry_target *target,
+++                       int numeric)
+++{
+++	const struct xt_EXAMPLE_info *ainfo =
+++		(const struct xt_EXAMPLE_info *)target->data;
+++
+++	switch (ainfo->mode) {
+++	case XT_EXAMPLE_MODE_YES:
+++		printf(" EXAMPLE immediate");
+++		break;
+++	case XT_EXAMPLE_MODE_NO:
+++		printf(" EXAMPLE never");
+++		break;
+++	case XT_EXAMPLE_MODE_THRESHOLD:
+++		printf(" EXAMPLE after_n %d", ainfo->u.threshold);
+++		break;
+++	default:
+++		break;
+++	}
+++}
+++
+++static void EXAMPLE_save(const void *ip, const struct xt_entry_target *target)
+++{
+++	const struct xt_EXAMPLE_info *ainfo =
+++		(const struct xt_EXAMPLE_info *)target->data;
+++
+++	switch (ainfo->mode) {
+++	case XT_EXAMPLE_MODE_YES:
+++		printf(" --immediate");
+++		break;
+++	case XT_EXAMPLE_MODE_NO:
+++		printf(" --never");
+++		break;
+++	case XT_EXAMPLE_MODE_THRESHOLD:
+++		printf(" --after_n %d", ainfo->u.threshold);
+++		break;
+++	default:
+++		break;
+++	}
+++}
+++
+++static struct xtables_target example_target = {
+++	.family		= NFPROTO_UNSPEC,
+++	.name		= "EXAMPLE",
+++	.version	= XTABLES_VERSION,
+++	.size		= XT_ALIGN(sizeof(struct xt_EXAMPLE_info)),
+++	.userspacesize	= XT_ALIGN(sizeof(struct xt_EXAMPLE_info)),
+++	.help		= EXAMPLE_help,
+++	.print		= EXAMPLE_print,
+++	.save		= EXAMPLE_save,
+++	.x6_parse	= EXAMPLE_parse,
+++	.x6_fcheck	= EXAMPLE_check,
+++	.x6_options	= EXAMPLE_opts,
+++};
+++
+++void _init(void)
+++{
+++	xtables_register_target(&example_target);
+++}
++diff --git a/include/linux/netfilter/xt_EXAMPLE.h b/include/linux/netfilter/xt_EXAMPLE.h
++new file mode 100644
++index 0000000..f3d61cf
++--- /dev/null
+++++ b/include/linux/netfilter/xt_EXAMPLE.h
++@@ -0,0 +1,49 @@
+++/* x_tables module for setting the IPv4/IPv6 example field
+++ *
+++ * (C) 2016 Xiaoping Fan <xfan@codeaurora.org>
+++ * This software is distributed under GNU GPL v2, 2016
+++ *
+++ * Example extension is used to show how to use iptables target.
+++ *
+++ * xt_EXAMPLE.h,v 1.0 2016/11/09 12:19:01
+++*/
+++#ifndef _XT_EXAMPLE_TARGET_H
+++#define _XT_EXAMPLE_TARGET_H
+++
+++#include <linux/types.h>
+++
+++/* target info */
+++enum xt_example_mode {
+++	XT_EXAMPLE_MODE_NO,
+++	XT_EXAMPLE_MODE_YES,
+++	XT_EXAMPLE_MODE_THRESHOLD,
+++	XT_EXAMPLE_MODE_MAX
+++};
+++
+++/*
+++ * Example target structure.
+++ */
+++struct xt_EXAMPLE_info {
+++	enum xt_example_mode mode;	/* How to process flow */
+++	union {
+++		__u32 threshold;	/* Process flow once its stats bigger than this threshold */
+++		__u32 all[2];
+++	} u;
+++};
+++
+++#endif /* _XT_EXAMPLE_TARGET_H */
++diff --git a/mconfig b/mconfig
++index 3be62c5..72dc99a 100644
++--- a/mconfig
+++++ b/mconfig
++@@ -24,3 +24,4 @@ build_psd=m
++ build_quota2=m
++ build_rtsp=m
++ build_LUA=m
+++build_example=m
