@@ -1,0 +1,14 @@
+#batch mode
+set width 0
+set height 0
+set verbose off
+set pagination off
+set print pretty on
+set logging redirect on
+
+source gdb_cmds/module.cmd
+source gdb_cmds/slab.cmd
+source gdb_cmds/task.cmd
+source gdb_cmds/module_load.cmd
+#source gdb_cmds/vmap.cmd
+quit

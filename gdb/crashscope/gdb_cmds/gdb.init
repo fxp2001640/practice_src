@@ -1,0 +1,32 @@
+#batch mode
+set width 0
+set height 0
+set pagination off
+set print pretty on
+
+printf "=======================GDB Core Dump Tool=============================\n"
+printf "* Try these tools:                                                   *\n"
+printf "*   ps                                                               *\n"
+printf "*   free                                                             *\n"
+printf "*   lsmod                                                            *\n"
+printf "*   ifconfig                                                         *\n"
+printf "*   print_skb address                                                *\n"
+printf "*   print_netdev address                                             *\n"
+printf "*                                                                    *\n"
+printf "* Often used gdb commands                                            *\n"
+printf "*   info thread : show tasks running on all CPU cores                *\n"
+printf "*   thread n    : switch to task n(CPU core)                         *\n"
+printf "*   bt          : stack back trace                                   *\n"
+printf "*   info local  : show local variables                               *\n"
+printf "*   info reg   : show CPU registers                                  *\n"
+printf "*   x/20i $pc-40  : show 20 assembly instructions based on pc        *\n"
+printf "*   x/20x address      : dump 20 words                               *\n"
+printf "*   ......                                                           *\n"
+printf "*                                                                    *\n"
+printf "* For module symbols, please use the commands in log/module_load.log *\n"
+printf "* For more pre-processing results, please see the log folder.        *\n"
+printf "======================================================================\n"
+
+source tmp/module_load.cmd
+source gdb_cmds/tools.cmd
+#info thread

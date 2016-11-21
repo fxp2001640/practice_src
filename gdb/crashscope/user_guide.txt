@@ -1,0 +1,41 @@
+1, Download mm.tar.gz, and unzip it, let's say it is unziped at "/path/to/mm".
+2, temporary directory created at runtime: "/path/to/mm/log", "/path/to/mm/tmp"
+3, prepare files:
+	3.1, suppose your CrashDump Location is "/path/to/crash/dump", it should be reported in your IR.
+	3.2, Copy "/path/to/crash/dump/Output/core0_regs.cmm",
+		  "/path/to/crash/dump/Output/core1_regs.cmm",
+		  "/path/to/crash/dump/Output/core2_regs.cmm",
+		  "/path/to/crash/dump/Output/core3_regs.cmm",
+		to "/path/to/mm/coredump".
+	3.3, copy "/path/to/crash/dump/EBICS0.bin" to "/path/to/mm/coredump".
+	3.4, create file "/path/to/mm/coredump/oops.txt", and copy register description section to this file.
+		Register description section in crash dump should be like following:
+== == == == == == == == ==
+[0000] task: cf883180 ti: cf8a8000 task.ti: cf8a8000
+[0000] PC is at 0xb4385158
+[0000] LR is at ecm_db_connection_deref+0x8ec/0xac0 [ecm]
+[0000] pc : [<b4385158>]    lr : [<bf367758>]    psr: a0000113
+[0000] sp : cf8a9e18  ip : 00000000  fp : 00000000
+[0000] r10: c08100c0  r9 : 00000000  r8 : cef26c0c
+[0000] r7 : bf3d29ac  r6 : 00000000  r5 : 00000000  r4 : cef26c00
+[0000] r3 : b4385158  r2 : 00000102  r1 : c41d0c00  r0 : cce3eb80
+[0000] Flags: NzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment kernel
+[0000] Control: 10c5387d  Table: 8389c06a  DAC: 00000015
+== == == == == == == == ==
+	3.5, suppose your MetaBuild location is "/path/to/meta/build", it should be reported in your IR.
+	3.6, copy "/path/to/meta/build/common/build/ipq/openwrt-ipq806x-vmlinux.elf" to "/path/to/mm/coredump".
+4, modify file "/path/to/mm/coredump.conf":
+	4.1, change variable BINUTILS_PATH to your path where your platform bin utils are. It's an absolute path.
+	4.2, change CORE_DUMP_PATH to "/path/to/mm/coredump"
+5, execute file "/path/to/mm/coredump.sh", it will finally enter GDB shell.
+6, Symbols of loadable modules can't be resolved, so you have to load it by yourself. Let's say your kernel module is "YourKernelModule".
+	6.1, execute command "source gdb_cmds/module_load.cmd" in GDB shell to get load address of your kernel module. It's output should be like following:
+== == == == == == == == ==
+module: YourKernelModule @0xbf9d515c
+=====================================
+	core address: 0xbf9d5000+0xac
+== == == == == == == == ==
+	6.2, Then the load address of your kernel module is "0xbf9d5000", let's define it as "YourKernelModule_LoadAddress".
+	6.3, Suppose your kernel module is "/path/to/your/kernel/module", it is not stripped and include symbols, generally it is called as "YourKernelModule.o"
+	6.4, execute command "add-symbol-file '/path/to/your/kernel/module' 'YourKernelModule_LoadAddress'" in GDB shell.
+7, That's all.
