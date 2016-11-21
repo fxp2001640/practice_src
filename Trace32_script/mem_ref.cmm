@@ -1,0 +1,308 @@
+
+
+//&start_addr=0xd0000000
+//&start_addr=0xbf56274c
+//&start_addr=0xbf64274c
+//&end_addr=0xbf60274c
+//&end_addr=0xbf6a31dc
+//&end_addr=0xdfffffff
+
+//open #1 addr_ref_stat.txt /create
+//open #1 analyze_modules.txt /create
+//open #1 analyze_fs.txt /create
+//open #1 analyze_dev.txt /create
+open #1 addr_range_search.txt /create
+//gosub addr_ref_analyze 0xbf64a74c 0xbf65474c 0x14 #1
+
+//gosub get_head_of_list 0xd19a8c00 4
+//gosub analyze_modules #1 0xff
+//gosub list_super_block #1
+//gosub list_dentry_of_super_block #1 0xDD413300
+//gosub list_inode_of_super_block #1 0xDD413300
+//gosub list_netdevices #1
+//gosub find_dev "eth0"
+//ENTRY &dev
+//print &dev
+gosub addr_range_search 0xd0000000 0xdffffff0 0xbf11e410 0xbf122410 #1
+close #1
+enddo
+
+
+
+
+//search address which is in a special range
+addr_range_search:
+ENTRY &start_addr &end_addr &range_start &range_end &output_fd
+LOCAL &cur_addr
+LOCAL &ref_cnt
+
+&ref_cnt=0
+&cur_addr=&start_addr
+while &cur_addr!=&end_addr
+(
+	LOCAL &ref_addr
+
+	if &ref_cnt==0x10000
+	(
+		print "&cur_addr"
+		&ref_cnt=0
+	)
+
+	&ref_addr=Data.Long(NSD:&cur_addr)
+	if &ref_addr>&range_start&&&ref_addr<&range_end
+		write &output_fd "&cur_addr" " => &ref_addr"
+
+	&cur_addr=&cur_addr+4
+	&ref_cnt=&ref_cnt+1
+)
+
+return
+
+
+
+
+//analyze how many other memory areas a special address refferenced
+addr_ref_analyze:
+ENTRY &start_addr &end_addr &next_ptr_offset &output_fd
+LOCAL &cur_addr
+
+&cur_addr=&start_addr
+while &cur_addr!=&end_addr
+(
+	LOCAL &ref_addr
+	LOCAL &ref_next_addr
+	LOCAL &ref_cnt
+	LOCAL &possible_size
+
+	print "&cur_addr"
+
+	&possible_size=0xffff
+	&ref_cnt=0
+	&ref_addr=Data.Long(NSD:&cur_addr)
+	&ref_next_addr=Data.Long(NSD:(&ref_addr+&next_ptr_offset))
+
+	while &ref_addr!=0&&&ref_next_addr!=0&&&ref_addr!=&ref_next_addr
+	(
+		LOCAL &cur_size
+
+		&ref_cnt=&ref_cnt+1
+
+		if &ref_addr>&ref_next_addr
+			&cur_size=&ref_addr-&ref_next_addr
+		else
+			&cur_size=&ref_next_addr-&ref_addr
+
+
+		if &cur_size<0x8000&&&cur_size<&possible_size
+			&possible_size=&cur_size
+
+		&ref_addr=Data.Long(NSD:(&ref_addr+&next_ptr_offset))
+		&ref_next_addr=Data.Long(NSD:(&ref_next_addr+&next_ptr_offset))
+		if &ref_next_addr!=0&&&ref_next_addr!=&ref_addr
+			&ref_next_addr=Data.Long(NSD:(&ref_next_addr+&next_ptr_offset))
+	)
+
+	if &ref_cnt>=2
+	(
+		if &ref_addr==&ref_next_addr
+			write &output_fd "&cur_addr" " == &ref_cnt    size = &possible_size"
+		else
+			write &output_fd "&cur_addr" " =0 &ref_cnt    size = &possible_size"
+	)
+
+	&cur_addr=&cur_addr+4
+)
+
+return
+
+
+
+
+analyze_modules:
+ENTRY &output_fd &cnt_limit
+LOCAL &linux_modules
+LOCAL &next_module
+LOCAL &analyzed_cnt
+
+&analyzed_cnt=0
+&linux_modules=symbol.begin(modules)
+&next_module=Data.Long(&linux_modules)
+
+while (D:&next_module)!=&linux_modules
+(
+	LOCAL &module_start_addr
+	LOCAL &module_data_start
+	LOCAL &module_data_end
+
+	&module_start_addr=&next_module-4
+	&module_data_start=&module_start_addr+0x158
+	&module_data_end=Data.Long(NSD:(&module_start_addr+0x114))
+	write &output_fd "&module_start_addr(&module_data_start - &module_data_end): " Data.String(NSD:(&module_start_addr+0xc))
+
+	gosub addr_ref_analyze &module_data_start &module_data_end 0x0 &output_fd
+
+	&next_module=Data.Long(NSD:&next_module)
+	&analyzed_cnt=&analyzed_cnt+1
+	if &analyzed_cnt==&cnt_limit
+		return
+)
+
+return
+
+
+
+
+get_head_of_list:
+ENTRY &list_entry_addr &prev_ptr_offset
+LOCAL &cur
+LOCAL &prev
+
+&cur=&list_entry_addr
+&prev=Data.Long(NSD:(&cur+&prev_ptr_offset))
+
+while &prev!=0
+(
+	&cur=&prev
+	&prev=Data.Long(NSD:(&cur+&prev_ptr_offset))
+)
+
+print &cur
+
+return
+
+
+
+
+list_inode_of_super_block:
+ENTRY &output_fd &block
+
+var.newlocal struct super_block * \cmm_block
+var.newlocal struct list_head * \cmm_inode_head
+var.newlocal struct list_head * \cmm_inode_next
+var.newlocal int \cmm_list_offset
+
+var \cmm_list_offset=&(((struct inode *)0)->i_sb_list)
+var \cmm_block=(struct super_block *)&block
+var \cmm_inode_head=&\cmm_block->s_inodes
+var \cmm_inode_next=\cmm_inode_head->next
+
+
+var.while \cmm_inode_next!=\cmm_inode_head
+(
+	var.newlocal struct inode * \cmm_inode
+
+	var \cmm_inode=(struct inode *)(((char *)\cmm_inode_next)-\cmm_list_offset)
+	var.write &output_fd %hex \cmm_inode " count = " %hex \cmm_inode->i_count.counter " state = " %hex \cmm_inode->i_state
+
+	var \cmm_inode_next=\cmm_inode_next->next
+)
+
+return
+
+
+
+
+list_dentry_of_super_block:
+ENTRY &output_fd &block
+
+var.newlocal struct super_block * \cmm_block
+var.newlocal struct list_head * \cmm_dentry_head
+var.newlocal struct list_head * \cmm_dentry_next
+var.newlocal int \cmm_list_offset
+
+var \cmm_list_offset=&(((struct dentry *)0)->d_lru)
+var \cmm_block=(struct super_block *)&block
+var \cmm_dentry_head=&\cmm_block->s_dentry_lru.node->list
+var \cmm_dentry_next=\cmm_dentry_head->next
+
+
+var.while \cmm_dentry_next!=\cmm_dentry_head
+(
+	var.newlocal struct dentry * \cmm_dentry
+
+	var \cmm_dentry=(struct dentry *)(((char *)\cmm_dentry_next)-\cmm_list_offset)
+	var.write &output_fd %string \cmm_dentry->d_parent->d_iname "/" %string \cmm_dentry->d_iname " " %hex \cmm_dentry " inode = " %hex \cmm_dentry->d_inode
+
+	var \cmm_dentry_next=\cmm_dentry_next->next
+)
+
+return
+
+
+
+
+list_super_block:
+ENTRY &output_fd
+
+var.newlocal struct list_head * \cmm_super_blocks
+var.newlocal struct list_head * \cmm_next_super_block
+
+var \cmm_super_blocks=&super_blocks
+var \cmm_next_super_block=super_blocks.next
+
+var.while \cmm_next_super_block!=\cmm_super_blocks
+(
+	var.newlocal struct super_block * \cmm_block
+
+	var \cmm_block=(struct super_block *)\cmm_next_super_block
+	var.write &output_fd %string \cmm_block->s_id " " %hex \cmm_block
+
+	var \cmm_next_super_block=\cmm_next_super_block->next
+)
+
+return
+
+
+
+
+list_netdevices:
+ENTRY &output_fd
+
+var.newlocal struct list_head * \cmm_netdevices
+var.newlocal struct list_head * \cmm_next_netdevice
+var.newlocal int \cmm_list_offset
+
+var \cmm_list_offset=&(((struct net_device *)0)->dev_list)
+var \cmm_netdevices=&init_net.dev_base_head
+var \cmm_next_netdevice=\cmm_netdevices->next
+
+var.while \cmm_next_netdevice!=\cmm_netdevices
+(
+	var.newlocal struct net_device * \cmm_netdev
+
+	var \cmm_netdev=(struct net_device *)(((char *)\cmm_next_netdevice)-\cmm_list_offset)
+	var.write &output_fd %string \cmm_netdev->name " " %hex \cmm_netdev " vlan_info = " %hex \cmm_netdev->vlan_info
+
+	var \cmm_next_netdevice=\cmm_next_netdevice->next
+)
+
+return
+
+
+
+
+find_dev:
+ENTRY &dev_name
+
+var.newlocal struct list_head * \cmm_netdevices
+var.newlocal struct list_head * \cmm_next_netdevice
+var.newlocal int \cmm_list_offset
+
+var \cmm_list_offset=&(((struct net_device *)0)->dev_list)
+var \cmm_netdevices=&init_net.dev_base_head
+var \cmm_next_netdevice=\cmm_netdevices->next
+
+var.while \cmm_next_netdevice!=\cmm_netdevices
+(
+	var.newlocal struct net_device * \cmm_netdev
+
+	var \cmm_netdev=(struct net_device *)(((char *)\cmm_next_netdevice)-\cmm_list_offset)
+	var.if \cmm_netdev->name==&dev_name
+	(
+		return \cmm_netdev
+	)
+
+	var \cmm_next_netdevice=\cmm_next_netdevice->next
+)
+
+return 0x0
