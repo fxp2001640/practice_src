@@ -1,0 +1,100 @@
+#!/usr/bin/ruby
+# coding: utf-8
+
+#chromosome 染色体
+#protein 蛋白质
+
+dnaMap = {
+"001" => "xpfan = [23, 45, 10]",
+"002" => "\n",
+"003" => "puts xpfan"
+}
+
+class Chromosome
+    def initialize(dnaRepo, dna)
+        @repo = dnaRepo
+        @dna = dna
+        @splitPoints = Array.new(dna.length - 1, (this.valid ? 10 : 5))
+    end
+
+    def generateProtein
+        output = ""
+
+        @dna.each do |gene|
+            protein = @repo[gene]
+            if protein
+                output += protein
+            end
+        end
+
+        return output
+    end
+
+    def valid
+        begin
+            code_ret = eval generateProtein
+        rescue => ex
+            code_ret = 0
+        end
+
+        return code_ret != 0
+    end
+end
+
+def expressDNA(dnaRepository, dna)
+    reg = /[\(]*\((\d+)\)/
+    output = ""
+    nextOffset = 0
+
+    while nextOffset < dna.length
+        match = reg.match(dna[nextOffset..-1])
+        if match
+            geneValue = dnaRepository[match[1]]
+            if geneValue
+                output += geneValue
+            end
+            nextOffset += match.end(0)
+        else
+            return output
+        end
+    end
+
+    return output
+end
+
+def dnaIsValid(dnaRepository, dna)
+    begin
+        code_ret = eval expressDNA(dnaRepository, dna)
+    rescue => ex
+        code_ret = 0
+    end
+
+    return code_ret != 0
+end
+
+def cellRun(dnaRepository, total_run_cnt)
+    cellClass = Struct.new(:dna, :life)
+    cellArray = Array.new
+    idx = 0
+
+    while idx < total_run_cnt do
+        while cellArray.length < 100 do
+            cellArray.push(cellClass.new("(#{Random.new(1000)})", 100))
+        end
+
+        cellArray.each do |cell|
+            if !dnaIsValid(dnaRepository, cell.dna)
+                cell.life -= 1
+                if cell.life == 0
+                    cellArray.delete(cell)
+                end
+            end
+        end
+
+
+    end
+end
+
+
+
+puts dnaIsValid(dnaList, "(002)(002)(003)")
