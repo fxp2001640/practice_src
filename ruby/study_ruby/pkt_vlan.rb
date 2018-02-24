@@ -137,3 +137,88 @@ class CheckPktVlan
 end
 
 CheckPktVlan.new
+
+class OffloadUser
+	def initialize(def_permissions)
+		@offload_permission = def_permissions
+		@connections = Array.new
+		@conn_class = Struct.new(:id, :pkt_cnt, :type, :created_time, :offload)
+		@stats = Struct.new(:new, :expired).new(0, 0)
+		@unique_id = 0
+	end
+
+	def update_conn_stats
+		@connections.each do |conn|
+			delete_conn = false
+			if conn.type == 0 #garbage connection
+				delete_conn = (Time.now - conn.created_time > 60)
+			elsif conn.type == 1 #light connection
+				delete_conn = (Time.now - conn.created_time > 20)
+			else #heavy connection
+				conn.pkt_cnt = 500 * (Time.now - conn.created_time).to_i
+				conn.pkt_cnt = 500 if conn.pkt_cnt < 500
+				delete_conn = (Time.now - conn.created_time > 100)
+			end
+
+			if delete_conn
+				@connections.delete(conn)
+				@stats.expired += 1
+			end
+		end
+	end
+
+	def log_16(pkt_cnt)
+		log_result = 0
+		pkt_cnt_copy = pkt_cnt
+
+		while pkt_cnt_copy > 0
+			log_result += 1
+			pkt_cnt_copy = pkt_cnt_copy >> 4
+		end
+
+		return log_result
+	end
+
+	def update_offload_permission
+		@offload_permission = (@connections.length > 100 ? @connections.length : 100)
+		permissions_incr = 0
+		@connections.each do |conn|
+			if conn.offload
+				permissions_incr += 35 + 13 * log_16(conn.pkt_cnt)
+				#permissions_incr += 100
+			end
+		end
+		@offload_permission += (permissions_incr / 100).to_i
+	end
+
+	def new_connection(type)
+		if rand(@offload_permission) < @offload_permission - @connections.length
+			new_conn = @conn_class.new(@unique_id, (250 * type), type, Time.now, (type > 0))
+			@connections.push(new_conn)
+			@stats.new += 1
+			@unique_id += 1
+		end
+	end
+
+	def run
+		last_print = Time.now
+		try_num = 0
+		while true
+			update_conn_stats
+			update_offload_permission
+
+			#new_connection(rand(3))
+			new_connection(1)
+			try_num += 1
+
+			return if @connections.length > 10000
+
+			if Time.now - last_print > 1
+				last_print = Time.now
+				puts "#{Time.now} tried=#{try_num} new=#{@stats.new} expired=#{@stats.expired} total=#{@connections.length}"
+			end
+		end
+	end
+end
+
+OffloadUser.new(100).run
