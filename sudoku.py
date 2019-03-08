@@ -34,29 +34,72 @@ class SudokuUtility:
         # There is no error
         return False
 
+    def check_candidate_missmatch(self, r_start, r_end, c_start, c_end):
+        #Init
+        vs = [0] * 9
+        num_of_candidate = 0
+        num_of_empty = 0
+        #Collect
+        for r in range(r_start, r_end):
+            for c in range(c_start, c_end):
+                if self.table[r * 9 + c] == 0:
+                    num_of_empty += 1
+                    self.candidate[r * 9 + c].num_of_candidate(vs)
+        #Collect number of candidate
+        for idx in range(0, 9):
+            if not vs[idx] == 0: num_of_candidate += 1
+        #return true if missmatch
+        #return not num_of_empty == num_of_candidate
+        if self.debug:
+            print("num_of_empty={ex},num_of_candidate={cx}".format(ex=num_of_empty, cx=num_of_candidate))
+        return False
+
 class CandidateNumber:
     def __init__(self):
-        self.num = int('111111111', 2)
+        self.suppress_cnt = [0] * 9
 
     def set_candidate(self, candidate):
         if candidate == 0:
-            self.num = int('111111111', 2)
+            self.suppress_cnt = [0] * 9
         else:
-            self.num = 1 << (candidate - 1)
+            self.suppress_cnt[candidate - 1] = 0
+            for idx in range(0, 9):
+                if not idx == (candidate - 1):
+                    self.suppress_cnt[idx] += 1
 
-    def add_candidate(self, new_candidate):
-        if not new_candidate == 0:
-            self.num = self.num | (1 << (new_candidate - 1))
+    def add_candidate(self, new_candidate, recover):
+        #Skip if argument is invalid
+        if new_candidate == 0:
+            return
+        #Process
+        if recover:
+            if self.suppress_cnt[new_candidate - 1] > 0:
+                self.suppress_cnt[new_candidate - 1] -= 1
+        else:
+            self.suppress_cnt[new_candidate - 1] = 0
 
     def remove_candidate(self, old_candidate):
         if not old_candidate == 0:
-            self.num = self.num & ~(1 << (old_candidate - 1))
+            self.suppress_cnt[old_candidate - 1] += 1
+
+    def rollback_as_candidate(self, old_value):
+        for idx in range(0, 9):
+            if not idx == (old_value - 1):
+                self.suppress_cnt[idx] -= 1
 
     def get_candidate(self):
         for idx in range(0, 9):
-            if self.num & (1 << idx):
+            if self.suppress_cnt[idx] == 0:
                 return idx + 1
         return 0
+
+    def get_candidate_list(self):
+        output_str = "{ "
+        for idx in range(0, 9):
+            if self.suppress_cnt[idx] == 0:
+                output_str = output_str + "{x} ".format(x = (idx + 1))
+        output_str = output_str + "}"
+        return output_str
 
     def get_random_candidate(self):
         candidate_cnt = self.num_of_candidate()
@@ -64,24 +107,24 @@ class CandidateNumber:
         selected_idx = random.randrange(0, candidate_cnt)
         cnt = 0
         for idx in range(0, 9):
-            if self.num & (1 << idx):
+            if self.suppress_cnt[idx] == 0:
                 if cnt == selected_idx:
                     return idx +1
                 cnt += 1
 
-    def num_of_candidate(self):
-        tmp = self.num
+    def num_of_candidate(self, to_fill = 'NA'):
         cnt = 0
-        while tmp:
-            cnt += 1
-            tmp = tmp & (tmp - 1)
-        #print(bin(self.num), cnt)
+        for idx in range(0, 9):
+            if self.suppress_cnt[idx] == 0:
+                cnt += 1
+                if not to_fill == 'NA': to_fill[idx] += 1
         return cnt
 
 class SudokuTable(SudokuUtility):
-    def __init__(self, path = 'NA', parent = 'NA'):
+    def __init__(self, path = 'NA', parent = 'NA', debug = False):
         self.table = [0] * 81
         self.candidate = [0] * 81
+        self.debug = debug
         for idx in range(0, 81):
             self.candidate[idx] = CandidateNumber()
         if not path == 'NA':
@@ -100,14 +143,20 @@ class SudokuTable(SudokuUtility):
         for r in range(0, 9):
             if self.check_duplication_in_list(r, r+1, 0, 9):
                 return True
+            if self.check_candidate_missmatch(r, r+1, 0, 9):
+                return True
         #Check every column
         for c in range(0, 9):
             if self.check_duplication_in_list(0, 9, c, c+1):
+                return True
+            if self.check_candidate_missmatch(0, 9, c, c+1):
                 return True
         #Check every 9-block
         for r in range(0, 9, 3):
             for c in range(0, 9, 3):
                 if self.check_duplication_in_list(r, r+3, c, c+3):
+                    return True
+                if self.check_candidate_missmatch(r, r+3, c, c+3):
                     return True
         for idx in range(0, 81):
             if self.table[idx] == 0 and self.candidate[idx].num_of_candidate() == 0:
@@ -128,7 +177,8 @@ class SudokuTable(SudokuUtility):
 
     def clone_from(self, parent):
         for idx in range(0, 81):
-            self.set_item((idx / 9), (idx % 9), parent.table[idx])
+            if not parent.table[idx] == 0:
+                self.set_item((idx / 9), (idx % 9), parent.table[idx])
 
     def make_mutation(self):
         zero_cnt = 0
@@ -156,7 +206,27 @@ class SudokuTable(SudokuUtility):
         if not changed == 0:
             return self.evolution()
 
+    def recover_candidate(self, r, c, v):
+        self.table[r * 9 + c] = 0
+        self.candidate[r * 9 + c].rollback_as_candidate(v)
+        for idx in range(0, 9):
+            if not idx == c:
+                self.candidate[r * 9 + idx].add_candidate(v, True)
+        for idx in range(0, 9):
+            if not idx == r:
+                self.candidate[idx * 9 + c].add_candidate(v, True)
+        n_start = r / 3
+        m_start = c / 3
+        for n in range(0, 3):
+            for m in range(0, 3):
+                if (not n == (r % 3)) or (not m == (c % 3)):
+                    self.candidate[((n_start * 3) + n) * 9 + ((m_start * 3) + m)].add_candidate(v, True)
+
     def set_item(self, r, c, v):
+        original_v = self.table[r * 9 + c]
+        if not original_v == 0:
+            self.recover_candidate(r, c, v)
+        #update candidate in the same row/column/cube
         self.table[r * 9 + c] = v
         self.candidate[r * 9 + c].set_candidate(v)
         for idx in range(0, 9):
@@ -173,6 +243,7 @@ class SudokuTable(SudokuUtility):
                     self.candidate[((n_start * 3) + n) * 9 + ((m_start * 3) + m)].remove_candidate(v)
         #propagate change
         self.evolution()
+        if self.debug: self.dump()
 
     def dump(self):
         print("*****1***2***3*|*4***5***6*|*7***8***9**")
@@ -203,7 +274,7 @@ class SudokuTable(SudokuUtility):
 class SudokuEvolution:
     def __init__(self, question_path):
         self.current = []
-        self.current.append(SudokuTable(question_path))
+        self.current.append(SudokuTable(path=question_path))
         self.current_limit = 240
         self.population_size = 40
 
@@ -278,7 +349,13 @@ class SudokuEvolution:
             if idx >= self.population_size:
                 del self.current[idx]
 
+    def renew(self, first):
+        for idx in range(len(self.current)-1, -1, -1):
+            del self.current[idx]
+        self.current.append(first)
+
     def evolution(self, total_generations = 10000):
+        first = self.current[0]
         gen_cnt = 0
         while gen_cnt < total_generations:
             lowest_life_value = self.current[0].get_life_value()
@@ -287,26 +364,36 @@ class SudokuEvolution:
             self.grow_population()
             self.select_child()
             gen_cnt += 1
+            if (gen_cnt % 10 == 0): self.renew(first)
 
     def dump(self):
         idx = 0
         for it in self.current:
             lv = it.get_life_value()
-            print("{n}======================={l}".format(n = idx, l = lv))
             if lv <= 81:
+                print("**============{n}={l}============**".format(n=idx, l=lv))
                 it.dump()
+                break
             elif idx <= 3:
+                print("**============{n}={l}============**".format(n=idx, l=lv))
                 it.dump()
             idx += 1
 
-sd = SudokuTable()
-sd.load_from_file(sys.argv[1])
-print(sd.table_is_in_wrong_state())
-print(sd.get_life_value())
-sd.dump()
-sd.make_mutation()
-print(sd.table_is_in_wrong_state())
-print(sd.get_life_value())
-#se = SudokuEvolution(sys.argv[1])
-#se.evolution(int(sys.argv[2]))
-#se.dump()
+def single_test():
+    sd = SudokuTable(debug = True)
+    sd.load_from_file(sys.argv[1])
+    print(sd.table_is_in_wrong_state())
+    print(sd.get_life_value())
+    sd.dump()
+    sd.make_mutation()
+    print(sd.table_is_in_wrong_state())
+    print(sd.get_life_value())
+    sd.dump()
+
+if len(sys.argv) == 3:
+    single_test()
+    #se = SudokuEvolution(sys.argv[1])
+    #se.evolution(int(sys.argv[2]))
+    #se.dump()
+else:
+    print("Help: python sudoku.py <question file> <round num>")
